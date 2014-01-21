@@ -1,0 +1,52 @@
+body {
+  margin-top: 80px;
+}
+
+.nav-selector .caret {
+  opacity: 0;
+  border: 0;
+  margin: 0;
+}
+
+.navbar-right {
+  margin-right: 0 !important;
+}
+
+.praise {
+  margin-top: 30px;
+}
+
+.user-tile img {
+  position: absolute;
+  border-radius: 100px;
+  width: 100px;
+  height: 100px;
+}
+
+.user-tile .details {
+  margin-left: 120px;
+  margin-top: 15px;
+}
+
+.user-tile {
+  min-height: 100px;
+  margin-bottom: 15px;
+}
+
+.user-tile .details .name {
+  font-weight: bold;
+}
+
+.user-tile .details .quote {
+  border-left: 3px solid lightgrey;
+  padding-left: 10px;
+  margin-top: 5px;
+}
+
+.user-tile .details .quote:before {
+  content: '"';
+}
+
+.user-tile .details .quote:after {
+  content: '"';
+}

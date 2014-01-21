@@ -1,0 +1,16 @@
+┌───────────────┐
+│ Project Files │
+└───────────────┘
+# uncomment this if you don't want to check in your dist files, but committing these is handy for serving static content (i.e. gh-pages) 
+# src/main/www/dist
+
+┌──────────────────┐
+│ NPM Dependencies │
+└──────────────────┘
+node_modules
+
+┌────────────────────┐
+│ Bower Dependencies │
+└────────────────────┘
+# uncomment this if you don't want to check in your bower dependencies, but committing these is handy for serving static content (i.e. gh-pages) 
+# src/main/www/libs

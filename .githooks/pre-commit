@@ -1,0 +1,6 @@
+#!/bin/bash
+set -x
+
+./installhooks.sh
+grunt ci
+git add src/main/www/dist

@@ -1,0 +1,9 @@
+<img src="{{user.user.picture}}" align="left">
+
+<div class="details">
+    <div class="name">
+        {{user.user.name.title | titlecase}}. {{user.user.name.first | titlecase}} {{user.user.name.last | titlecase}}
+    </div>
+
+    <div class="quote">{{quotes[$index]}}</div>
+</div>
