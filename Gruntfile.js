@@ -14,7 +14,7 @@ module.exports = function ( grunt )
 		watch: {
 			express: {
 				files: 'src/main/node/**/*.js',
-				tasks: ['express:dev'],
+				tasks: ['express'],
 				options: {
 					nospawn: true
 				}
