@@ -1054,15 +1054,15 @@
 			</g>
 		</g>
 	</g>
-	<g id="oval-room">
+	<g id="oval-room" ng-controller="RoomCtrl" ng-init="name = 'oval-room'">
 		<g class="lights">
 			<g class="off">
-				<circle fill="none" stroke="#715725" stroke-width="6" cx="310.5" cy="223.9" r="4.3"/>
-				<circle fill="none" stroke="#715725" stroke-width="6" cx="240.9" cy="269.1" r="4.3"/>
+				<circle fill="none" stroke="#715725" stroke-width="6" cx="310.5" cy="223.9" r="4.3" ng-click="toggleLights()" />
+				<circle fill="none" stroke="#715725" stroke-width="6" cx="240.9" cy="269.1" r="4.3" ng-click="toggleLights()" />
 			</g>
 			<g class="on">
 				
-					<radialGradient id="SVGID_4_" cx="321.5089" cy="218.5454" r="32.011" gradientTransform="matrix(1.9888 0 0 1.9888 -323.2532 -215.3677)" gradientUnits="userSpaceOnUse">
+				<radialGradient id="SVGID_4_" cx="321.5089" cy="218.5454" r="32.011" gradientTransform="matrix(1.9888 0 0 1.9888 -323.2532 -215.3677)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
 					<stop  offset="1" style="stop-color:#FFCF01;stop-opacity:0"/>
 				</radialGradient>
