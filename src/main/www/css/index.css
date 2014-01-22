@@ -50,3 +50,7 @@ body {
 .user-tile .details .quote:after {
     content: '"';
 }
+
+.transparent {
+    opacity: 0.5;
+}
