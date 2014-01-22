@@ -3,7 +3,7 @@ var express = require("express");
 var logger = function(req, res, next) {
     console.log("Received request: " + req.originalUrl);
     next(); 
-}
+};
 
 var app = express();
 var port = process.env.PORT || 8888;
@@ -20,7 +20,7 @@ app.use(express.compress());
 
 console.log("Serving files from " + webroot);
 app.use(express.static(webroot));
-app.use("/api", express.static(stubroot));
+app.use("/bin", express.static(stubroot));
 
 console.log("Running on " + port);
 app.listen(port);

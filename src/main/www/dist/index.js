@@ -1,5 +1,5 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"NVYujn":[function(require,module,exports){
-angular.module("index",["ui.bootstrap"]).controller("WelcomeCtrl",["$scope","$http",function(e,t){e.quotes=["Untethered drastically simplified my UI dev environment.","I don't know how I could live without Untethered.","Untethered is a great combination of Bower, Grunt, Yeoman, Node.js.","Our teams efficiency has improved by 294% since adopting Untethered.","Everyone else jumped on the bandwagon, so we did too!"],t.get("http://api.randomuser.me/?results=5").success(function(t){console.log(t),e.users=t.results})}]).filter("titlecase",function(){return function(e){for(var t=e.split(" "),o=0;o<t.length;o++)t[o]=t[o].toLowerCase().charAt(0).toUpperCase()+t[o].slice(1);return t.join(" ")}});
+angular.module( "index", ["ui.bootstrap"] );
 },{}],"index/index":[function(require,module,exports){
 module.exports=require('NVYujn');
 },{}]},{},["NVYujn"])
