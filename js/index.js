@@ -8,8 +8,8 @@
 
 angular.module( "index", ["ui.bootstrap"] )
 
-	.value( "lightsOnUrl", "/bin/house/lights/on.json" )
-	.value( "lightsOffUrl", "/bin/house/lights/off.json" )
+	.value( "lightsOnUrl", "/aem-example/bin/house/lights/on.json" )
+	.value( "lightsOffUrl", "/aem-example/bin/house/lights/off.json" )
 	.factory( "LightsService", ["$http", "lightsOffUrl", "lightsOnUrl", function ( $http, lightsOffUrl, lightsOnUrl ) {
 		var service = {};
 
