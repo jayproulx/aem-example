@@ -1,38 +1,50 @@
 body {
-  margin-top: 80px;
+    margin-top: 80px;
 }
 
 .center {
-  text-align: center;
+    text-align: center;
+}
+
+.github-link {
+    background-image: url(https://github.global.ssl.fastly.net/images/modules/logos_page/GitHub-Mark.png);
+    background-position: center left;
+    background-size: contain;
+    background-repeat: no-repeat;
+    padding-left: 45px;
+}
+
+.navbar-right {
+    margin-right: 10px;
 }
 
 .lights .on {
-  -webkit-transition: opacity 500ms;
-  transition: opacity 500ms;
+    -webkit-transition: opacity 500ms;
+    transition: opacity 500ms;
 }
 
 .transparent {
-  opacity: 0.5;
+    opacity: 0.5;
 }
 
 .solid {
-  opacity: 1;
+    opacity: 1;
 }
 
 /* bootstrap already defines invisible */
 
 .almost-invisible {
-  opacity: 0;
+    opacity: 0;
 }
 
 .zone {
-  -webkit-transition: opacity 1s;
-  transition: opacity 1s;
+    -webkit-transition: opacity 1s;
+    transition: opacity 1s;
 }
 
 .zone stop {
-  -webkit-transition: stop-color 1s;
-  transition: stop-color 1s;
+    -webkit-transition: stop-color 1s;
+    transition: stop-color 1s;
 }
 
 .zone.C20 stop,
@@ -41,7 +53,7 @@ body {
 .zone.C17 stop,
 .zone.C16 stop,
 .zone.C15 stop {
-  stop-color: #0013E9 !important;
+    stop-color: #0013E9 !important;
 }
 
 .zone.C21 stop,
@@ -49,34 +61,34 @@ body {
 .zone.C23 stop,
 .zone.C24 stop,
 .zone.C25 stop {
-  stop-color: #E91300 !important;
+    stop-color: #E91300 !important;
 }
 
 .zone.C20 {
-  opacity: 0;
+    opacity: 0;
 }
 
 .zone.C19,
 .zone.C21 {
-  opacity: 0.1;
+    opacity: 0.1;
 }
 
 .zone.C18,
 .zone.C22 {
-  opacity: 0.2;
+    opacity: 0.2;
 }
 
 .zone.C17,
 .zone.C23 {
-  opacity: 0.3;
+    opacity: 0.3;
 }
 
 .zone.C16,
 .zone.C24 {
-  opacity: 0.4;
+    opacity: 0.4;
 }
 
 .zone.C15,
 .zone.C25 {
-  opacity: 0.5;
+    opacity: 0.5;
 }
