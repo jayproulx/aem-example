@@ -2,55 +2,68 @@ body {
     margin-top: 80px;
 }
 
-.nav-selector .caret {
-    opacity: 0;
-    border: 0;
-    margin: 0;
-}
-
-.navbar-right {
-    margin-right: 0 !important;
-}
-
-.praise {
-    margin-top: 30px;
-}
-
-.user-tile img {
-    position: absolute;
-    border-radius: 100px;
-    width: 100px;
-    height: 100px;
-}
-
-.user-tile .details {
-    margin-left: 120px;
-    margin-top: 15px;
-}
-
-.user-tile {
-    min-height: 100px;
-    margin-bottom: 15px;
-}
-
-.user-tile .details .name {
-    font-weight: bold;
-}
-
-.user-tile .details .quote {
-    border-left: 3px solid lightgrey;
-    padding-left: 10px;
-    margin-top: 5px;
-}
-
-.user-tile .details .quote:before {
-    content: '"';
-}
-
-.user-tile .details .quote:after {
-    content: '"';
+.lights .on {
+    transition: opacity 500ms;
 }
 
 .transparent {
+    opacity: 0.5;
+}
+
+.solid {
+    opacity: 1;
+}
+
+/* bootstrap already defines invisible */
+.almost-invisible {
+    opacity: 0;
+}
+
+.zone {
+    transition: opacity 1s;
+}
+
+.zone stop {
+    transition: stop-color 1s;
+}
+
+.zone.C20 stop,
+.zone.C19 stop,
+.zone.C18 stop,
+.zone.C17 stop,
+.zone.C16 stop,
+.zone.C15 stop {
+    stop-color: #0013E9 !important;
+}
+
+.zone.C21 stop,
+.zone.C22 stop,
+.zone.C23 stop,
+.zone.C24 stop,
+.zone.C25 stop {
+    stop-color: #E91300 !important;
+}
+
+.zone.C20 {
+    opacity: 0;
+}
+
+.zone.C19, .zone.C21 {
+    opacity: 0.1;
+}
+
+.zone.C18, .zone.C22 {
+    opacity: 0.2;
+}
+
+.zone.C17, .zone.C23 {
+    opacity: 0.3;
+}
+
+.zone.C16, .zone.C24 {
+    opacity: 0.4;
+}
+
+.zone.C15, .zone.C25 {
     opacity: 0.5;
 }
