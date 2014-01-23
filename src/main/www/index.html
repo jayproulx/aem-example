@@ -9,14 +9,14 @@
 	<div ng-include="'partials/nav.html'"></div>
 
 	<div class="container" ng-controller="AutomationCtrl">
-        <div class="col-sm-6">
+        <div class="col-sm-6 center">
             <label for="westWingTemperature">West Wing Temperature</label>
-            <select id="westWingTemperature" ng-model="zones['west-wing'].temperature" ng-change="updateZone('west-wing')" ng-options="temp.value as temp.label for temp in temperatures"></select>
+            <select id="westWingTemperature" ng-model="zones['west-wing'].temperature" ng-change="persistZone('west-wing')" ng-options="temp.value as temp.label for temp in temperatures"></select>
         </div>
 
-        <div class="col-sm-6">
+        <div class="col-sm-6 center">
             <label for="eastWingTemperature">East Wing Temperature</label>
-            <select id="eastWingTemperature" ng-model="zones['east-wing'].temperature" ng-change="updateZone('east-wing')" ng-options="temp.value as temp.label for temp in temperatures"></select>
+            <select id="eastWingTemperature" ng-model="zones['east-wing'].temperature" ng-change="persistZone('east-wing')" ng-options="temp.value as temp.label for temp in temperatures"></select>
         </div>
 
         <div class="house" ng-include="'images/house.svg'"></div>

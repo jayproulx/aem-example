@@ -93,6 +93,11 @@ angular.module( "index", ["ui.bootstrap"] )
 			$scope.$broadcast( "update-zone", zone, $scope.zones[zone] );
 		};
 
+		$scope.persistZone = function ( zone ) {
+			console.log("broadcasting persist-zone for " + zone);
+			$scope.$broadcast( "persist-zone", zone, $scope.zones[zone] );
+		};
+
 		$scope.updateRoom = function ( room ) {
 			console.log("broadcasting update-room for " + room);
 			$scope.$broadcast( "update-room", room, $scope.rooms[room] );
@@ -149,6 +154,13 @@ angular.module( "index", ["ui.bootstrap"] )
 			}
 		} );
 
+		$scope.$on( "persist-zone", function ( event, zoneName, zone ) {
+			if ( $scope.name == zoneName ) {
+				console.log("on update-zone for " + zoneName, zone)
+				$scope.setTemperature(zone.temperature);
+			}
+		} );
+
 		$scope.setTemperature = function ( temperature ) {
 			var originalTemperature = $scope.temperature;
 
@@ -159,7 +171,6 @@ angular.module( "index", ["ui.bootstrap"] )
 					// normally we'd want to set this to the value of the response from the server,
 					// however, this is a static example, so we'll use what the user set in the UI.
 					$scope.temperature = temperature;
-					$scope.$apply();
 
 				} )
 				.error( function ( data, status, headers, config ) {
@@ -167,7 +178,6 @@ angular.module( "index", ["ui.bootstrap"] )
 
 					// reset the value back to the original temperature, since we had an error from the service
 					$scope.temperature = originalTemperature;
-					$scope.$apply();
 				} );
 
 		}
