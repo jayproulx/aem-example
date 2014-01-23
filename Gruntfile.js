@@ -62,6 +62,7 @@ module.exports = function ( grunt )
 	/* Each page gets its own module (typically), define a new one by copying and pasting a line and the respective config file here */
 	gruntModules( grunt, {
 		vendor: require( "./grunt.vendor.js" ),
+		automation: require( "./grunt.automation.js" ),
 		index: require( "./grunt.index.js" )
 	} );
 
