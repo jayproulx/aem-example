@@ -4,6 +4,11 @@
  * To simulate network lag, since this should execute pretty quickly, $timeout is used to provide a bit of a delay
  * when calling services to show off wait states.  The reason it's implemented in the controllers rather than the
  * services is that we want to return the promise right away, we'll just delay updating the value until after the timeout.
+ *
+ * Using Values
+ * ------------
+ * The values defined here can be fairly easily extracted into a new module to be configured either by loading a file
+ * from the server, or simply loading pre-defined angular modules for different environments.
  */
 
 angular.module( "index", ["ui.bootstrap"] )
@@ -19,6 +24,17 @@ angular.module( "index", ["ui.bootstrap"] )
 
 		service.turnOn = function ( room ) {
 			return $http( {method: "GET", url: lightsOnUrl, params: {"room": room}} );
+		};
+
+		return service;
+	}] )
+
+	.value( "temperatureSetUrl", "/bin/house/temperature/set.json" )
+	.factory( "TemperatureService", ["$http", "temperatureSetUrl", function ( $http, temperatureSetUrl ) {
+		var service = {};
+
+		service.set = function ( zone, temperature ) {
+			return $http( {method: "GET", url: temperatureSetUrl, params: {"zone": zone, "temperature": temperature}} );
 		};
 
 		return service;
@@ -52,4 +68,34 @@ angular.module( "index", ["ui.bootstrap"] )
 					}, 1000 )
 				} )
 		};
+	}] )
+
+	// ideally this will be renamed to ZoneViewCtrl, since we only really want to represent the model on the floor plan,
+	// we should have a parent controller elsewhere that can take care of setting the temperature.
+	.controller( 'ZoneCtrl', ["$scope", "$timeout", "TemperatureService", function ( $scope, $timeout, TemperatureService ) {
+		$scope.name = $scope.name || "unknown-zone";
+		$scope.temperature = 20;
+
+		$scope.setTemperature = function ( temperature ) {
+			var originalTemperature = $scope.temperature;
+
+			// todo: for a nice CSS transition, we can use a temperature half way between the original value and the new value
+
+			TemperatureService.setTemperature( $scope.name, temperature )
+				.success( function ( data, status, headers, config ) {
+					// normally we'd want to set this to the value of the response from the server,
+					// however, this is a static example, so we'll use what the user set in the UI.
+					$scope.temperature = temperature;
+					$scope.apply();
+
+				} )
+				.error( function ( data, status, headers, config ) {
+					// todo: $emit an error event to handle globally if there's a problem setting the temperature
+
+					// reset the value back to the original temperature, since we had an error from the service
+					$scope.temperature = originalTemperature;
+					$scope.apply();
+				} );
+
+		}
 	}] );

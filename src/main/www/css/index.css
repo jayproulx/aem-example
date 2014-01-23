@@ -18,3 +18,44 @@ body {
 .almost-invisible {
     opacity: 0;
 }
+
+.zone.C20 stop,
+.zone.C19 stop,
+.zone.C18 stop,
+.zone.C17 stop,
+.zone.C16 stop,
+.zone.C15 stop {
+    stop-color: #0013E9;
+}
+
+.zone.C21 stop,
+.zone.C22 stop,
+.zone.C23 stop,
+.zone.C24 stop,
+.zone.C25 stop {
+    stop-color: #E91300;
+}
+
+.zone.C20 {
+    opacity: 0;
+}
+
+.zone.C19, .zone.C21 {
+    opacity: 10;
+}
+
+.zone.C18, .zone.C22 {
+    opacity: 20;
+}
+
+.zone.C17, .zone.C23 {
+    opacity: 30;
+}
+
+.zone.C16, .zone.C24 {
+    opacity: 40;
+}
+
+.zone.C15, .zone.C25 {
+    opacity: 50;
+}
