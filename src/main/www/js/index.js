@@ -13,8 +13,21 @@
 
 angular.module( "index", ["ui.bootstrap"] )
 
+	.value( "defaultsUrl", "/bin/house/defaults.json" )
 	.value( "lightsOnUrl", "/bin/house/lights/on.json" )
 	.value( "lightsOffUrl", "/bin/house/lights/off.json" )
+	.value( "temperatureSetUrl", "/bin/house/temperature/set.json" )
+
+	.factory( "DefaultsService", ["$http", "defaultsUrl", function ( $http, defaultsUrl ) {
+		var service = {};
+
+		service.getDefaults = function () {
+			return $http( {method: "GET", url: defaultsUrl} );
+		};
+
+		return service;
+	}] )
+
 	.factory( "LightsService", ["$http", "lightsOffUrl", "lightsOnUrl", function ( $http, lightsOffUrl, lightsOnUrl ) {
 		var service = {};
 
@@ -29,20 +42,72 @@ angular.module( "index", ["ui.bootstrap"] )
 		return service;
 	}] )
 
-	.value( "temperatureSetUrl", "/bin/house/temperature/set.json" )
 	.factory( "TemperatureService", ["$http", "temperatureSetUrl", function ( $http, temperatureSetUrl ) {
 		var service = {};
 
-		service.set = function ( zone, temperature ) {
+		service.setTemperature = function ( zone, temperature ) {
 			return $http( {method: "GET", url: temperatureSetUrl, params: {"zone": zone, "temperature": temperature}} );
 		};
 
 		return service;
 	}] )
 
+	.controller( "AutomationCtrl", ["$scope", "$timeout", "DefaultsService", function ( $scope, $timeout, DefaultsService ) {
+		$scope.temperatures = [ // [15,16,17,18,19,20,21,22,23,24,25];
+			{"label": "15°C", "value": 15},
+			{"label": "16°C", "value": 16},
+			{"label": "17°C", "value": 17},
+			{"label": "18°C", "value": 18},
+			{"label": "19°C", "value": 19},
+			{"label": "20°C", "value": 20},
+			{"label": "21°C", "value": 21},
+			{"label": "22°C", "value": 22},
+			{"label": "23°C", "value": 23},
+			{"label": "24°C", "value": 24},
+			{"label": "25°C", "value": 25}
+		];
+
+		DefaultsService.getDefaults()
+			.success( function ( data, status, headers, config ) {
+				$timeout(function() {
+					$scope.zones = data.zones;
+					$scope.rooms = data.rooms;
+
+					for ( var room in $scope.rooms ) {
+						$scope.updateRoom( room );
+					}
+
+					for ( var zone in $scope.zones ) {
+						$scope.updateZone( zone );
+					}
+				}, 1000);
+			} )
+			.error( function ( data, status, headers, config ) {
+				// todo: $emit an error event to handle globally if there's a problem loading the defaults
+			} )
+
+		// here we only want to take data from the form and pass it along to the
+		$scope.updateZone = function ( zone ) {
+			console.log("broadcasting update-zone for " + zone);
+			$scope.$broadcast( "update-zone", zone, $scope.zones[zone] );
+		};
+
+		$scope.updateRoom = function ( room ) {
+			console.log("broadcasting update-room for " + room);
+			$scope.$broadcast( "update-room", room, $scope.rooms[room] );
+		}
+	}] )
+
 	.controller( 'RoomCtrl', ["$scope", "$timeout", "LightsService", function ( $scope, $timeout, LightsService ) {
 		$scope.name = $scope.name || "unknown-room"; // this will eventually be re-set by ng-init
 		$scope.lights = false; // default to off
+
+		$scope.$on( "update-room", function ( event, roomName, room ) {
+			if ( $scope.name == roomName ) {
+				console.log("on update-room for " + roomName, room)
+				$scope.lights = room.lights;
+			}
+		} );
 
 		$scope.toggleLights = function () {
 			var originalState = $scope.lights,
@@ -76,6 +141,13 @@ angular.module( "index", ["ui.bootstrap"] )
 		$scope.name = $scope.name || "unknown-zone";
 		$scope.temperature = 20;
 
+		$scope.$on( "update-zone", function ( event, zoneName, zone ) {
+			if ( $scope.name == zoneName ) {
+				console.log("on update-zone for " + zoneName, zone)
+				$scope.temperature = zone.temperature;
+			}
+		} );
+
 		$scope.setTemperature = function ( temperature ) {
 			var originalTemperature = $scope.temperature;
 
@@ -86,7 +158,7 @@ angular.module( "index", ["ui.bootstrap"] )
 					// normally we'd want to set this to the value of the response from the server,
 					// however, this is a static example, so we'll use what the user set in the UI.
 					$scope.temperature = temperature;
-					$scope.apply();
+					$scope.$apply();
 
 				} )
 				.error( function ( data, status, headers, config ) {
@@ -94,7 +166,7 @@ angular.module( "index", ["ui.bootstrap"] )
 
 					// reset the value back to the original temperature, since we had an error from the service
 					$scope.temperature = originalTemperature;
-					$scope.apply();
+					$scope.$apply();
 				} );
 
 		}

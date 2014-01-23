@@ -1,3 +1,61 @@
 {
+	"zones": {
+		"east-wing": {
+			"fan": false,
+			"temperature": 19
+		},
 
+		"west-wing": {
+			"fan": false,
+			"temperature": 21
+		}
+	},
+
+	"rooms": {
+		"center-hall": {
+			"curtains": false,
+			"lights": true
+		},
+
+		"oval-room": {
+			"curtains": false,
+			"lights": true
+		},
+
+		"private-sitting-room": {
+			"curtains": false,
+			"lights": false
+		},
+
+		"presidents-bedroom": {
+			"curtains": false,
+			"lights": false
+		},
+
+		"west-sitting-hall": {
+			"curtains": false,
+			"lights": true
+		},
+
+		"treaty-room": {
+			"curtains": false,
+			"lights": false
+		},
+
+		"lincoln-bedroom": {
+			"curtains": false,
+			"lights": false
+		},
+
+		"queens-bedroom": {
+			"curtains": false,
+			"lights": false
+		},
+
+		"presidents-dining-room": {
+			"curtains": false,
+			"lights": true
+		}
+
+	}
 }
