@@ -9,6 +9,19 @@
  * ------------
  * The values defined here can be fairly easily extracted into a new module to be configured either by loading a file
  * from the server, or simply loading pre-defined angular modules for different environments.
+ *
+ * Events Dispatched:
+ *
+ * room-updated: function(event, roomName, roomObj) {}
+ * room-update-error: function(event, roomName, connectionData) {}
+ * zone-updated: function(event, zoneName, zoneObj) {}
+ * zone-update-error: function(event, zoneName, connectionData) {}
+ *
+ * Events Handled:
+ *
+ * update-room: arguments: roomName, roomObj
+ * update-zone: arguments: zoneName: zoneObj
+ *
  */
 
 var config = require( "automation/automation.config" );

@@ -3,7 +3,6 @@
 	 viewBox="0 0 2560 1440" enable-background="new 0 0 2560 1440" xml:space="preserve">
 <g id="underlays" transform="translate(-10.185197,-657.03269)">
 	<g id="east-wing" ng-controller="ZoneCtrl" class="zone C{{temperature}}" ng-init="name = 'east-wing'">
-		
 		<linearGradient class="temperatureGrad" id="SVGID_100_" gradientUnits="userSpaceOnUse" x1="164.2842" y1="1282.4757" x2="561.8547" y2="1282.4757" gradientTransform="matrix(3.9046 0 0 -3.9046 132.0589 6305.1602)">
 			<stop  offset="0" style="stop-color:#E91300;stop-opacity:0"/>
 			<stop  offset="1" style="stop-color:#E91300;stop-opacity:0.5"/>
