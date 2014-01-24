@@ -18,7 +18,7 @@ module.exports = function ( grunt, moduleName )
 
 		autoprefixer: {
 			options: {
-				browsers: ["last 4 version"]
+				browsers: ["last 8 version"]
 			},
 
 			expand: true,
