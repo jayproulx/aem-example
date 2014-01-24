@@ -1,26 +1,69 @@
 <html ng-app="index">
 
 <head>
-	<link rel="stylesheet" type="text/css" href="libs/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" type="text/css" href="dist/index.css" />
+    <link rel="stylesheet" type="text/css" href="libs/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="dist/index.css"/>
 </head>
 
 <body>
-	<div ng-include="'partials/nav.html'"></div>
+<div ng-include="'partials/nav.html'"></div>
 
-	<div class="container" ng-controller="AutomationCtrl">
-        <div ng-include="'partials/temperature-form.html'"></div>
-        <div class="house" ng-include="'images/house.svg'"></div>
-	</div>
+<div class="container" ng-controller="AutomationCtrl">
+    <div ng-include="'partials/temperature-form.html'"></div>
+    <div class="house" ng-include="'images/house.svg'" onload="resizeFloorplan()" ng-controller="FloorplanCtrl"></div>
+</div>
 
-    <div class="container" ng-controller="APICtrl">
-        <h1>API Output</h1>
-        <div ng-repeat="message in messages">{{ message }}</div>
+<div ng-controller="APICtrl" class="modal fade" id="modalAPIOutput" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">API Output</h4>
+            </div>
+            <div class="modal-body">
+                <div ng-repeat="message in messages">{{ message }}</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
+</div>
 
-	<script src="dist/vendor.js"></script>
-    <script src="dist/automation.js"></script>
-    <script src="dist/index.js"></script>
+<div class="modal fade" id="modalInstructions" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Instructions</h4>
+            </div>
+            <div class="modal-body">
+                <ol>
+                    <li>Click the
+                        <svg width="24" height="24">
+                            <circle fill="none" stroke="#715725" stroke-width="12" cx="12" cy="12" r="4"/>
+                        </svg>
+                        to turn the lighs on/off in a room.
+                        <ol>
+                            <li>The lights will temporarily sit in an intermediary state while we wait for a response from the server</li>
+                        </ol>
+                    </li>
+                    <li>Adjust the temperature in the east/west wing by changing the values.</li>
+                    <li>See the API Output dialog for captured events.</li>
+                </ol>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="libs/jquery/jquery.min.js"></script>
+<script src="libs/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="dist/vendor.js"></script>
+<script src="dist/automation.js"></script>
+<script src="dist/index.js"></script>
 </body>
 
 </html>
