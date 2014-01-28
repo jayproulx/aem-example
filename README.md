@@ -53,7 +53,8 @@ for updating the data.
 _The components must have HTTP based server interaction_
 
 The Automation API sends mock requests to the server to store and update data.  In some cases, we don't use the response
-because of the static nature of the mock data.  The jQuery
+because of the static nature of the mock data.  For the purposes of this example, the jQuery API consumer posts logging
+ data to a fictitious logging service.
 
 _The solution has to be extensible and documented_
 
@@ -61,6 +62,9 @@ There are annotations in all relevant source code directories (src/main/www/**),
 comments are not meant to be exhaustively or extensively documented, and assumes the reader has knowledge of the
 language and frameworks used.  Code that is not immediately clear or highly formulaic will be commented for the reader
 to quickly understand the intentions.
+
+To demonstrate extensibility, a jQuery API consumer has been provided as an example, along with a UI to manipulate the
+available data.
 
 TODO's
 ------
