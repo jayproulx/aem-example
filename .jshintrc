@@ -5,6 +5,9 @@
 		"console": true,
 		"module": true,
 		"require": true,
-		"angular": true
+		"angular": true,
+		"beforeEach": true,
+		"describe": true,
+		"it": true
 	}
 }

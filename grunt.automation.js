@@ -17,9 +17,8 @@ module.exports = function ( grunt, moduleName )
 		},
 
 		karma: {
-			configFile: 'src/test/www/js/karma.conf.js',
+			configFile: 'src/test/www/automation/karma.automation.js',
 			singleRun: true
 		}
-
-	}
+	};
 };

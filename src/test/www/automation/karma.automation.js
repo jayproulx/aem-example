@@ -15,17 +15,17 @@ module.exports = function ( config )
 
 		// list of files / patterns to load in the browser
 		files: [
-			'src/main/www/libs/jquery/jquery.min.js',
+			'src/test/www/fixtures/**/*.html',
 			'src/main/www/dist/vendor.js',
 			'src/main/www/libs/angular-mocks/angular-mocks.js',
-			'src/main/www/dist/index.js',
-			'src/test/www/js/**/*.js'
+			'src/main/www/dist/automation.js',
+			'src/test/www/automation/**/*.js'
 		],
 
 
 		// list of files to exclude
 		exclude: [
-			'**/*.conf.js'
+			'**/karma.*.js'
 		],
 
 

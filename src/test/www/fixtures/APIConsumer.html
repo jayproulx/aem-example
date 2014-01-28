@@ -1,0 +1,56 @@
+<!-- create some unrendered templates that we can use for the jQuery API consumer -->
+<script type="text/html" id="room-template">
+    <div class="room-template clearfix">
+        <a class="btn btn-default btn-xs lights pull-right">Toggle Lights</a>
+        <div class="room-name">unknown-room</div>
+    </div>
+</script>
+
+<script type="text/html" id="zone-template">
+    <div class="zone-template clearfix">
+        <div class="btn-group btn-group-xs pull-right">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                <span class="current-temperature">20</span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu">
+                <li><a href="#" data-temp="15">15&deg;C</a></li>
+                <li><a href="#" data-temp="16">16&deg;C</a></li>
+                <li><a href="#" data-temp="17">17&deg;C</a></li>
+                <li><a href="#" data-temp="18">18&deg;C</a></li>
+                <li><a href="#" data-temp="19">19&deg;C</a></li>
+                <li class="disabled"><a href="#" data-temp="20">20&deg;C</a></li>
+                <li><a href="#" data-temp="21">21&deg;C</a></li>
+                <li><a href="#" data-temp="22">22&deg;C</a></li>
+                <li><a href="#" data-temp="23">23&deg;C</a></li>
+                <li><a href="#" data-temp="24">24&deg;C</a></li>
+                <li><a href="#" data-temp="25">25&deg;C</a></li>
+            </ul>
+        </div>
+        <div class="zone-name">unknown-zone</div>
+    </div>
+</script>
+
+<div class="modal fade" id="modalAPIConsumer" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">API Consumer</h4>
+            </div>
+            <div class="modal-body">
+                <div class="reset-template clearfix">
+                    <a class="btn btn-danger btn-xs pull-right reset">Reset</a>
+                    <strong>Reset to defaults</strong>
+                </div>
+                <h5>Rooms</h5>
+                <div class="all-rooms"></div>
+
+                <h5>Zones</h5>
+                <div class="all-zones"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

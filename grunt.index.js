@@ -5,14 +5,14 @@ module.exports = function ( grunt, moduleName )
 			src: 'src/main/www/js/index.js',
 			dest: 'src/main/www/dist/index.js',
 			options: {
-				transform: [grunt.option( 'transform' )]//,
-//				aliasMappings: [
-//					{
-//						cwd: 'src/main/www/js',
-//						src: ['**/*.js'],
-//						dest: 'index'
-//					}
-//				]
+				transform: [grunt.option( 'transform' )],
+				aliasMappings: [
+					{
+						cwd: 'src/main/www/js/index',
+						src: ['**/*.js'],
+						dest: 'index'
+					}
+				]
 			}
 		},
 
@@ -28,9 +28,8 @@ module.exports = function ( grunt, moduleName )
 		},
 
 		karma: {
-			configFile: 'src/test/www/js/karma.conf.js',
+			configFile: 'src/test/www/js/karma.index.js',
 			singleRun: true
 		}
-
-	}
+	};
 };
