@@ -16,6 +16,7 @@ module.exports = function ( config )
 		// list of files / patterns to load in the browser
 		files: [
 			'src/test/www/fixtures/**/*.html',
+			'src/main/www/libs/jquery/jquery.min.js',
 			'src/main/www/dist/vendor.js',
 			'src/main/www/libs/angular-mocks/angular-mocks.js',
 			'src/main/www/dist/automation.js',
