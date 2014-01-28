@@ -1,3 +1,5 @@
+/* --- LAYOUT / GENERAL --- */
+
 body {
   margin-top: 80px;
 }
@@ -9,6 +11,26 @@ body {
 .github-link {
   margin-right: 10px !important;
 }
+
+h5 {
+  border-bottom: 1px solid #CCCCCC;
+  padding-bottom: 5px;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+/* --- API CONSUMER --- */
+
+.room-template,
+.zone-template {
+  margin-bottom: 10px;
+}
+
+.current-temperature:after {
+  content: "\0000b0C";
+}
+
+/* --- AUTOMATION --- */
 
 .lights .on {
   -webkit-transition: opacity 500ms;

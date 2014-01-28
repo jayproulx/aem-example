@@ -21,20 +21,18 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	 * to different zones and rooms.
 	 */
 	.controller( "AutomationCtrl", ["$rootScope", "$scope", "$timeout", "DefaultsService", function ( $rootScope, $scope, $timeout, DefaultsService ) {
-		"use strict";
-
 		$scope.temperatures = [ // [15,16,17,18,19,20,21,22,23,24,25];
-			{"label": "15°C", "value": 15},
-			{"label": "16°C", "value": 16},
-			{"label": "17°C", "value": 17},
-			{"label": "18°C", "value": 18},
-			{"label": "19°C", "value": 19},
-			{"label": "20°C", "value": 20},
-			{"label": "21°C", "value": 21},
-			{"label": "22°C", "value": 22},
-			{"label": "23°C", "value": 23},
-			{"label": "24°C", "value": 24},
-			{"label": "25°C", "value": 25}
+			{"label": "15\u00B0C", "value": 15},
+			{"label": "16\u00B0C", "value": 16},
+			{"label": "17\u00B0C", "value": 17},
+			{"label": "18\u00B0C", "value": 18},
+			{"label": "19\u00B0C", "value": 19},
+			{"label": "20\u00B0C", "value": 20},
+			{"label": "21\u00B0C", "value": 21},
+			{"label": "22\u00B0C", "value": 22},
+			{"label": "23\u00B0C", "value": 23},
+			{"label": "24\u00B0C", "value": 24},
+			{"label": "25\u00B0C", "value": 25}
 		];
 
 		$scope.loadDefaults = function () {
@@ -49,12 +47,16 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 
 						// update each room individually
 						for ( room in $scope.rooms ) {
-							$scope.updateRoom( room, true );
+							if ( $scope.rooms.hasOwnProperty( room ) ) {
+								$scope.updateRoom( room, true );
+							}
 						}
 
 						// update each zone individually
 						for ( zone in $scope.zones ) {
-							$scope.updateZone( zone, true );
+							if ( $scope.zones.hasOwnProperty( zone ) ) {
+								$scope.updateZone( zone, true );
+							}
 						}
 					}, 1000 );
 				} )
@@ -164,8 +166,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
 					$rootScope.$broadcast( "zone-updated", zoneName, $scope.zone );
 				}
-				else
-				{
+				else {
 					$scope.updateZone( zone );
 				}
 			}
