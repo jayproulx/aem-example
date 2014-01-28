@@ -1,0 +1,10 @@
+{
+	"unused": false,
+	"globals": {
+		"jQuery": true,
+		"console": true,
+		"module": true,
+		"require": true,
+		"angular": true
+	}
+}

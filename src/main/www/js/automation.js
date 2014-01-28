@@ -5,13 +5,13 @@
  * when calling services to show off wait states.  The reason it's implemented in the controllers rather than the
  * services is that we want to return the promise right away, we'll just delay updating the value until after the timeout.
  *
- * Using Values
- * ------------
- * The values defined here can be fairly easily extracted into a new module to be configured either by loading a file
- * from the server, or simply loading pre-defined angular modules for different environments.
+ * API Events
+ * ----------
  *
  * Events Dispatched:
  *
+ * defaults-loaded: function(event, data) {}
+ * defaults-load-error: function(event, connectionData) {}
  * room-updated: function(event, roomName, roomObj) {}
  * room-update-error: function(event, roomName, connectionData) {}
  * zone-updated: function(event, zoneName, zoneObj) {}
@@ -19,64 +19,30 @@
  *
  * Events Handled:
  *
+ * load-defaults: arguments: none
  * update-room: arguments: roomName, roomObj
  * update-zone: arguments: zoneName: zoneObj
  *
+ * On "dontPersist"
+ * ----------------
+ *
+ * We want the default value to be negative (i.e. persist all the time, unless we say otherwise), so in order to preserve
+ * that connotation, we use a negatively named variable.  This isn't a documented parameter, since anyone using the API
+ * externally should send the value to the server as normal.  Internally we want to avoid sending data to the server.
+ *
  */
 
-var config = require( "automation/automation.config" );
+var services = require( "automation/services" );
 
-angular.module( "automation", ["ui.bootstrap", "automation.config"] )
-
-	/*
-	 * DefaultsService picks up defaults for all rooms and zones.  In a live application, perhaps this is the current
-	 * state of the house/business.
-	 */
-	.factory( "DefaultsService", ["$http", "defaultsUrl", function ( $http, defaultsUrl ) {
-		var service = {};
-
-		service.getDefaults = function () {
-			return $http( {method: "GET", url: defaultsUrl} );
-		};
-
-		return service;
-	}] )
-
-	/*
-	 * LightsService requests updates from the server when turning on / off lights in differnet rooms.
-	 */
-	.factory( "LightsService", ["$http", "lightsOffUrl", "lightsOnUrl", function ( $http, lightsOffUrl, lightsOnUrl ) {
-		var service = {};
-
-		service.turnOff = function ( room ) {
-			return $http( {method: "GET", url: lightsOffUrl, params: {"room": room}} );
-		};
-
-		service.turnOn = function ( room ) {
-			return $http( {method: "GET", url: lightsOnUrl, params: {"room": room}} );
-		};
-
-		return service;
-	}] )
-
-	/*
-	 * TemperatureService allows us to set the temperature for different zones.
-	 */
-	.factory( "TemperatureService", ["$http", "temperatureSetUrl", function ( $http, temperatureSetUrl ) {
-		var service = {};
-
-		service.setTemperature = function ( zone, temperature ) {
-			return $http( {method: "GET", url: temperatureSetUrl, params: {"zone": zone, "temperature": temperature}} );
-		};
-
-		return service;
-	}] )
+module.exports = angular.module( "automation", ["ui.bootstrap", "automation.services"] )
 
 	/*
 	 * AutomationCtrl provides high level functionality for all automation activities, and loads defaults to distribute
 	 * to different zones and rooms.
 	 */
 	.controller( "AutomationCtrl", ["$rootScope", "$scope", "$timeout", "DefaultsService", function ( $rootScope, $scope, $timeout, DefaultsService ) {
+		"use strict";
+
 		$scope.temperatures = [ // [15,16,17,18,19,20,21,22,23,24,25];
 			{"label": "15°C", "value": 15},
 			{"label": "16°C", "value": 16},
@@ -91,141 +57,188 @@ angular.module( "automation", ["ui.bootstrap", "automation.config"] )
 			{"label": "25°C", "value": 25}
 		];
 
-		DefaultsService.getDefaults()
-			.success( function ( data, status, headers, config ) {
-				$timeout( function () {
-					$scope.zones = data.zones;
-					$scope.rooms = data.rooms;
+		$scope.loadDefaults = function () {
+			DefaultsService.getDefaults()
+				.success( function ( data, status, headers, config ) {
+					$timeout( function () {
+						var room, zone;
+						$scope.zones = data.zones;
+						$scope.rooms = data.rooms;
 
-					// update each room individually
-					for ( var room in $scope.rooms ) {
-						$scope.updateRoom( room );
-					}
+						// update each room individually
+						for ( room in $scope.rooms ) {
+							$scope.updateRoom( room, true );
+						}
 
-					// update each zone individually
-					for ( var zone in $scope.zones ) {
-						$scope.updateZone( zone );
-					}
+						// update each zone individually
+						for ( zone in $scope.zones ) {
+							$scope.updateZone( zone, true );
+						}
 
-					// Once all the defaults have been loaded, broadcast this from the rootScope so that external listeners
-					// can pick this up.
-					$rootScope.$broadcast( "defaults-loaded", data );
-				}, 1000 );
-			} )
-			.error( function ( data, status, headers, config ) {
-				// todo: $emit an error event to handle globally if there's a problem loading the defaults
-			} )
-
-		// here we only want to take data from the form and pass it along to the appropriate zone.
-		$scope.updateZone = function ( zone ) {
-			console.log( "broadcasting update-zone for " + zone );
-			$scope.$broadcast( "update-zone", zone, $scope.zones[zone] );
+						// Once all the defaults have been loaded, broadcast this from the rootScope so that external listeners
+						// can pick this up.
+						$rootScope.$broadcast( "defaults-loaded", data );
+					}, 1000 );
+				} )
+				.error( function ( data, status, headers, config ) {
+					// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
+					$rootScope.$broadcast( "defaults-load-error", {data: data, status: status, headers: headers, config: config} );
+				} );
 		};
 
-		$scope.persistZone = function ( zone ) {
-			console.log( "broadcasting persist-zone for " + zone );
-			$scope.$broadcast( "persist-zone", zone, $scope.zones[zone] );
+		// load defaults right away to populate the views
+		$scope.loadDefaults();
+
+		$scope.$on( "load-defaults", function () {
+			$scope.loadDefaults();
+		} );
+
+		$scope.updateZone = function ( zone, dontPersist ) {
+			$scope.$broadcast( "update-zone", zone, $scope.zones[zone], dontPersist );
 		};
 
-		$scope.updateRoom = function ( room ) {
-			console.log( "broadcasting update-room for " + room );
-			$scope.$broadcast( "update-room", room, $scope.rooms[room] );
-		}
+		$scope.updateRoom = function ( room, dontPersist ) {
+			$scope.$broadcast( "update-room", room, $scope.rooms[room], dontPersist );
+		};
 	}] )
 
 	/*
 	 * The RoomCtrl provides functionality for managing the view state and persistence for rooms.  Primarily lights and (maybe in the future), curtains.
 	 */
-	.controller( 'RoomCtrl', ["$rootScope", "$scope", "$timeout", "LightsService", function ( $rootScope, $scope, $timeout, LightsService ) {
+	.controller( 'RoomCtrl', ["$rootScope", "$scope", "$timeout", "RoomService", function ( $rootScope, $scope, $timeout, RoomService ) {
 		$scope.name = $scope.name || "unknown-room"; // this will eventually be re-set by ng-init
-		$scope.lights = false; // default to off
+		$scope.room = {
+			lights: false, // default to off
+			curtains: false
+		};
 
-		$scope.$on( "update-room", function ( event, roomName, room ) {
-			if ( $scope.name == roomName ) {
-				console.log( "on update-room for " + roomName, room )
-				$scope.lights = room.lights;
+		$scope.toggleLights = function() {
+			var room = Object.create($scope.room);
+			room.lights = !room.lights;
 
-				// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-				$rootScope.$broadcast( "room-updated", roomName, room );
+			$scope.setRoom($scope.name, room);
+		};
+
+		// dontPersist is only necessary when loading defaults, we want to update the view without making a call to the server
+		$scope.$on( "update-room", function ( event, roomName, room, dontPersist ) {
+			if ( $scope.name === roomName ) {
+
+				if ( dontPersist ) {
+					$scope.room = room;
+
+					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
+					$rootScope.$broadcast( "room-updated", roomName, room );
+				}
+				else {
+					$scope.setRoom( roomName, room );
+				}
 			}
 		} );
 
-		$scope.toggleLights = function () {
-			var originalState = $scope.lights,
-				newState = !$scope.lights,
-				serviceMethod = newState ? LightsService.turnOn : LightsService.turnOff;
+		$scope.setRoom = function ( roomName, room ) {
+			var originalRoom = $scope.room;
 
 			// set the lights state to undefined while we're waiting for a response, we'll use this to affect the view
 			// during the transition.
-			$scope.lights = undefined;
+			$scope.room.lights = undefined;
 
-			serviceMethod( $scope.name )
+			RoomService.setRoom( roomName, room )
 				.success( function ( data, status, headers, config ) {
 					$timeout( function () {
-						$scope.lights = data.lights;
+						// for this demo, we're not actually setting it to the response, we want to use the data passed in
+						$scope.room.lights = room.lights;
+
 					}, 1000 );
 
 					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-					$rootScope.$broadcast( "room-updated", $scope.name, {lights: $scope.lights} );
+					$rootScope.$broadcast( "room-updated", roomName, room );
 				} )
 				.error( function ( data, status, headers, config ) {
 					$timeout( function () {
 						// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
-						$rootScope.$broadcast( "room-update-error", $scope.name, {data: data, status: status, headers: headers, config: config} );
+						$rootScope.$broadcast( "room-update-error", roomName, {data: data, status: status, headers: headers, config: config} );
 
 						// revert the light setting back to what it was, since we couldn't contact the server.
-						$scope.lights = originalState;
-					}, 1000 )
-				} )
+						$scope.room = originalRoom;
+					}, 1000 );
+				} );
 		};
 	}] )
 
 	/*
-	 * ZoneCtrl manages the temperature (and maybe in the future) fan settings for one or more furnaces / zones that may
+	 * ZoneCtrl manages the temperature and (maybe in the future) fan settings for one or more furnaces / zones that may
 	 * be installed in the premises.
 	 */
-	.controller( 'ZoneCtrl', ["$rootScope", "$scope", "$timeout", "TemperatureService", function ( $rootScope, $scope, $timeout, TemperatureService ) {
+	.controller( 'ZoneCtrl', ["$rootScope", "$scope", "$timeout", "ZoneService", function ( $rootScope, $scope, $timeout, ZoneService ) {
 		$scope.name = $scope.name || "unknown-zone";
-		$scope.temperature = 20;
+		$scope.zone = {
+			fan: false,
+			temperature: 20
+		};
 
-		$scope.$on( "update-zone", function ( event, zoneName, zone ) {
+		// dontPersist is only necessary when loading defaults, we want to update the view without making a call to the server
+		$scope.$on( "update-zone", function ( event, zoneName, zone, dontPersist ) {
 			if ( $scope.name == zoneName ) {
-				console.log( "on update-zone for " + zoneName, zone )
-				$scope.temperature = zone.temperature;
 
-				// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-				$rootScope.$broadcast( "zone-updated", zoneName, {temperature: zone.temperature} );
+				if ( dontPersist ) {
+					$scope.zone = zone;
+
+					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
+					$rootScope.$broadcast( "zone-updated", zoneName, $scope.zone );
+				}
 
 			}
 		} );
 
-		$scope.$on( "persist-zone", function ( event, zoneName, zone ) {
-			if ( $scope.name == zoneName ) {
-				console.log( "on update-zone for " + zoneName, zone )
-				$scope.setTemperature( zone.temperature );
-			}
-		} );
-
-		$scope.setTemperature = function ( temperature ) {
-			var originalTemperature = $scope.temperature;
+		$scope.setZone = function ( zone ) {
+			var originalZone = $scope.zone;
 
 			// todo: for a nice CSS transition, we can use a temperature half way between the original value and the new value
 
-			TemperatureService.setTemperature( $scope.name, temperature )
+			ZoneService.setZone( $scope.name, zone )
 				.success( function ( data, status, headers, config ) {
 					// normally we'd want to set this to the value of the response from the server,
 					// however, this is a static example, so we'll use what the user set in the UI.
-					$scope.temperature = temperature;
+					$scope.zone = zone;
 
 					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-					$rootScope.$broadcast( "zone-updated", $scope.name, {temperature: temperature} );
+					$rootScope.$broadcast( "zone-updated", $scope.name, $scope.zone );
 				} )
 				.error( function ( data, status, headers, config ) {
 					// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
 					$rootScope.$broadcast( "zone-update-error", $scope.name, {data: data, status: status, headers: headers, config: config} );
 
-					// reset the value back to the original temperature, since we had an error from the service
-					$scope.temperature = originalTemperature;
+					// reset the value back to the original value, since we had an error from the service
+					$scope.zone = originalZone;
 				} );
-		}
-	}] );
+		};
+	}] )
+
+	/*
+	 * The SVG Floorplan will vary it's height when the window resizes if the height is not set explicitly.
+	 */
+	.directive( "floorplan", ["$window",
+		function ( $window ) {
+			return {
+				restrict: "E",
+				transclude: false,
+				controller: ["$scope", "$element", "$attrs", "$transclude", function ( $scope, $element, $attrs, $transclude ) {
+					$scope.lastHeight = undefined;
+
+					$window.onresize = function () {
+						$scope.resizeFloorplan();
+					};
+
+					$scope.resizeFloorplan = function () {
+						var svg = $element.find("svg" ),
+							h = (svg[0].offsetWidth * 0.6) + "px";
+
+						if ( h == $scope.lastHeight ) return;
+
+						svg.css("height", h);
+						$scope.lastHeight = h;
+					};
+				}],
+				templateUrl: "partials/floorplan.html"
+			};
+		}] );

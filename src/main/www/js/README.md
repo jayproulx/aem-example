@@ -61,17 +61,51 @@ __ZoneCtrl__
 
 __Events Dispatched__
 
- * room-updated: function(event, roomName, roomObj) {}
-   * Dispatched when the room view has been updated or the server has responded with an update
- * room-update-error: function(event, roomName, connectionData) {}
-   * Dispatched when the server was unable to process the request
- * zone-updated: function(event, zoneName, zoneObj) {}
-   * Dispatched when the zone view has been updated or the server has responded with an update
- * zone-update-error: function(event, zoneName, connectionData) {}
-   * Dispatched when the server was unable to process the request
+_defaults-loaded: function(event) {}_
+
+* Dispatched when defaults have been loaded from the server
+
+_room-updated: function(event, roomName, roomObj) {}_
+
+* Dispatched when the room view has been updated or the server has responded with an update
+
+_room-update-error: function(event, roomName, connectionData) {}_
+
+* Dispatched when the server was unable to process the request
+
+_zone-updated: function(event, zoneName, zoneObj) {}_
+
+* Dispatched when the zone view has been updated or the server has responded with an update
+
+_zone-update-error: function(event, zoneName, connectionData) {}_
+
+* Dispatched when the server was unable to process the request
    
 __Events Handled__
 
- * update-room: arguments: roomName, roomObj
-   * 
- * update-zone: arguments: zoneName: zoneObj
+_load-defaults: arguments: none_
+
+* Load the default values and update the view.
+
+_update-room: arguments: roomName, roomObj_
+
+* Emit to update a room with the name ```roomName``` with the properties contained in ```roomObj```
+
+```
+{
+	"lights": true, 
+	"curtains": false
+}
+```
+
+_update-zone: arguments: zoneName: zoneObj_
+
+* Emit to update a zone with the name ```zoneName``` with the properties contained in ```zoneObj```
+
+```
+{
+	"temperature": 20,
+	"fan": true
+}
+```
+

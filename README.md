@@ -10,9 +10,10 @@ Requirements
 ------------
 
 A JavaScript application simulating house automation: pressing a button on a control panel would visually turn on a light, change the temperature or close the curtains. Some constraints:
-- the application must use ~~jQuery~~ AngularJS
+- the application must use jQuery
 - the components must have HTTP based "server" interaction (use a static file for simplicity, data persistence is not required). For example, the heating component retrieves the current temperature from the server and also sends the desired one back to the server.
 - the solution has to be extensible and documented, so that we can develop our own components that react to events
+
 The application will be executed on a plain HTTP server with no possibility to run code server side and is being viewed in 2 major browsers of your choice.
 
 Tested On
@@ -41,10 +42,36 @@ As a result, I've chosen a slightly obscure means for delivering a user interfac
 
 Source code has README's at https://github.com/jayproulx/aem-example/tree/master/src/main/www/
 
+Meeting the Requirements
+------------------------
+
+_The application must use jQuery_
+
+jQuery is used to consume the events dispatched by the Automation API, render all updates, and provide  a simple form
+for updating the data.
+
+_The components must have HTTP based server interaction_
+
+The Automation API sends mock requests to the server to store and update data.  In some cases, we don't use the response
+because of the static nature of the mock data.  The jQuery
+
+_The solution has to be extensible and documented_
+
+There are annotations in all relevant source code directories (src/main/www/**), and comments in the code.  The code
+comments are not meant to be exhaustively or extensively documented, and assumes the reader has knowledge of the
+language and frameworks used.  Code that is not immediately clear or highly formulaic will be commented for the reader
+to quickly understand the intentions.
+
 TODO's
 ------
 
-- Write Unit Tests
+[x] Encapsulate Automation UI
+[x] Refactor temperature / lights API's into Room/Zone storage
+[ ] Adapt AngularJS events to document events for non-angular API consumers.
+[ ] Write jQuery API consumer
+[ ] Create HTTP logging API for jQuery to send data to
+[x] Convert FloorplanCtrl to a directive
+[ ] Write Unit Tests
 
 Attribution
 -----------

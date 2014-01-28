@@ -8,8 +8,8 @@ module.exports = function ( grunt, moduleName )
 				transform: [grunt.option( 'transform' )],
 				aliasMappings: [
 					{
-						cwd: 'src/main/www/js',
-						src: ['**/automation*.js'],
+						cwd: 'src/main/www/js/automation',
+						src: ['**/*.js'],
 						dest: 'automation'
 					}
 				]

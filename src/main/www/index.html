@@ -6,12 +6,10 @@
 </head>
 
 <body>
+
 <div ng-include="'partials/nav.html'"></div>
 
-<div class="container" ng-controller="AutomationCtrl">
-    <div ng-include="'partials/temperature-form.html'"></div>
-    <div class="house" ng-include="'images/house.svg'" onload="resizeFloorplan()" ng-controller="FloorplanCtrl"></div>
-</div>
+<div class="container" ng-include="'partials/automation.html'"></div>
 
 <div ng-controller="APICtrl" class="modal fade" id="modalAPIOutput" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
