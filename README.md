@@ -65,13 +65,13 @@ to quickly understand the intentions.
 TODO's
 ------
 
-[x] Encapsulate Automation UI
-[x] Refactor temperature / lights API's into Room/Zone storage
-[ ] Adapt AngularJS events to document events for non-angular API consumers.
-[ ] Write jQuery API consumer
-[ ] Create HTTP logging API for jQuery to send data to
-[x] Convert FloorplanCtrl to a directive
-[ ] Write Unit Tests
+- [x] Encapsulate Automation UI
+- [x] Refactor temperature / lights API's into Room/Zone storage
+- [ ] Adapt AngularJS events to document events for non-angular API consumers.
+- [ ] Write jQuery API consumer
+- [ ] Create HTTP logging API for jQuery to send data to
+- [x] Convert FloorplanCtrl to a directive
+- [ ] Write Unit Tests
 
 Attribution
 -----------
