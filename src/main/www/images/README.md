@@ -3,7 +3,7 @@ Images and house.svg
 
 ```house.svg``` in this case is treated much more as a View than a simple image.  In order to add some of the more specific rendering that I wanted to create for this example, I've used SVG [(which is nearly ubiquitously supported these days, with the exception of Android 2 and IE8)](http://caniuse.com/#search=svg).
 
-Here's an example of an AngularJS view implemented in this SVG file (please feel free to dig through the SVG if you like :)
+Here's an example of an AngularJS view implemented in this SVG file, these are examples only, and may not precisely represent whats in [house.svg](house.svg). (please feel free to dig through the SVG if you like :)
 
 A Zone:
 

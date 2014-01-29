@@ -22,4 +22,4 @@ Usage Instructions
 ------------------
 
 - Click the "Instructions" menu item to display a modal that describes how to use the features of the page
-- Click the "API Output" menu item to display a modal that has captured all of the events from the automation API.
+- Click the "API Consumer" menu item to display a user interface that allows control through a jQuery implementation of the Automation UI

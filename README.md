@@ -48,6 +48,10 @@ _Provide common continuous integration functionality_
 
 It's 2014, we expect more from our code, performance and quality than is available out of the box.  Code should be optimized, minified and unit tested.
 
+- [Minified code is available here](src/main/www/dist)
+- [Unminified source is available here](src/main/www/js)
+- [Unit tests are available here](src/test/www)
+
 _Provide both AngularJS and jQuery examples_
 
 The assignment requirements include a jQuery requirement, however there has been quite a bit of talk with the hiring manager and team about AngularJS as a primary context.  I've included AngularJS to demonstrate some of that skill set, and to "prove" the provided Automation API, I've built a jQuery API consumer that does some basic dom manipulation and an AJAX request.
