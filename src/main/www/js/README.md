@@ -11,7 +11,7 @@ index.js
 [index.js](index.js) is the entrypoint for our single page application.  It depends on, and inherits from the automation
 library (see below).
 
-[APIConsumer](index/APIConsumer) provides a pure jQuery example of how to render a UI and respond to Automation API events.
+[APIConsumer](index/APIConsumer.js) provides a pure jQuery example of how to render a UI and respond to Automation API events.
 
 automation.js
 -------------
