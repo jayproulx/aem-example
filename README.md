@@ -16,6 +16,18 @@ There are instructions on starting up the HTTP server over on the Untethered rep
 
 [https://github.com/jayproulx/generator-untethered#developing-an-untethered-ui](https://github.com/jayproulx/generator-untethered#developing-an-untethered-ui)
 
+### Download the zip ###
+
+[The zip file is available here.](https://dl.dropboxusercontent.com/u/3343118/aem-example.zip)
+
+Drop the contents of that zip into the root folder of your local web server.
+
+If you have node installed, I've added a quick express server that you can use to launch it instead.
+
+```
+# node server.js
+```
+
 Requirements
 ------------
 
