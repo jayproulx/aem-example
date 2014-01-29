@@ -1,5 +1,5 @@
 /**
- * AngularJS is very testable through an explicit separation of concerns
+ * Provide mock data for this test suite
  */
 var mocks = {
 	"rooms": {
@@ -127,7 +127,7 @@ describe( "Automation API", function () {
 
 			scope.$on( "room-updated", receiver.handler.bind( receiver ) );
 
-			$controller( 'RoomCtrl', {$element: $("<div></div>" ).attr("id", scope.name), $rootScope: rootScope, $scope: scope, RoomService: RoomService} );
+			$controller( 'RoomCtrl', {$element: $( "<div></div>" ).attr( "id", scope.name ), $rootScope: rootScope, $scope: scope, RoomService: RoomService} );
 
 			receiver.reset();
 		} ) );
@@ -198,7 +198,7 @@ describe( "Automation API", function () {
 
 			scope.$on( "zone-updated", receiver.handler.bind( receiver ) );
 
-			$controller( 'ZoneCtrl', {$element: $("<div></div>" ).attr("id", scope.name), $rootScope: rootScope, $scope: scope, ZoneService: ZoneService} );
+			$controller( 'ZoneCtrl', {$element: $( "<div></div>" ).attr( "id", scope.name ), $rootScope: rootScope, $scope: scope, ZoneService: ZoneService} );
 
 			receiver.reset();
 		} ) );

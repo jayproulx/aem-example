@@ -3,7 +3,7 @@ Automation API
 
 nb. In demonstrating the functionality, you can control lights and rooms and temperature in zones, curtains and fans are there for robustness (lets call it that :), and so that we don't have data structures with only a single property.
 
-Also, as mentioned in [README.md](README.md), when calling API's, there are ranges of acceptable values, validation is performed where necessary, your mileage may vary when providing values outside of the range or of the wrong type.  The UI provides restricted values, and all of those values are known to function.  Another area where I've chosen to focus on the requirements of the provided sample and focus on clarity.
+Also, as mentioned in [README.md](README.md), when calling API's, there are ranges of acceptable values, validation is performed where necessary, your mileage may vary when providing values outside of the range or of the wrong type.  The UI provides restricted values, and all of those values are known to function.  This is an area where I've chosen to focus on the requirements of the provided sample and on clarity.
 
 Loading the API
 ---------------
@@ -12,6 +12,8 @@ While the API was written in AngularJS, all events are adapted and dispatched fr
 
 1. Include [dist/automation.js](src/main/www/dist/automation.js) in your HTML document
 1. Load the Angular application: You can add it directly as ```ng-app="automation"```, or you can add ```automation``` as a dependency to your own Angular application (as we've done in [index.html](src/main/www/index.html) and [index.js](src/main/www/js/index.js))
+1. Add the Automation UI to your document as a child under your ```ng-app``` element.
+    - ```html <div class="container" ng-include="'partials/automation.html'"></div>```
 1. Create an API Consumer (as we've done in [APIConsumer.js](src/main/www/js/index/apiconsumer.js)), or alternatively, for testing, you can simply dispatch events from the Web Inspector and watch the updates take place.
 
 Events

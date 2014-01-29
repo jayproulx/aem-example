@@ -1,8 +1,7 @@
 // Karma configuration
 // Generated on Thu Dec 12 2013 10:59:50 GMT-0500 (EST)
 
-module.exports = function ( config )
-{
+module.exports = function ( config ) {
 	config.set( {
 
 		// base path, that will be used to resolve files and exclude
@@ -15,7 +14,7 @@ module.exports = function ( config )
 
 		// list of files / patterns to load in the browser
 		files: [
-			'src/test/www/fixtures/**/*.html',
+			'src/test/www/polyfills.js',
 			'src/main/www/libs/jquery/jquery.min.js',
 			'src/main/www/dist/vendor.js',
 			'src/main/www/libs/jasmine-fixture/dist/jasmine-fixture.min.js',
@@ -60,7 +59,8 @@ module.exports = function ( config )
 		// - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
 		// - PhantomJS
 		// - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
-		browsers: ['Chrome'],
+		// browsers: ['Chrome', 'PhantomJS'],
+		browsers: ['PhantomJS'],
 
 
 		// If browser does not capture in given timeout [ms], kill it

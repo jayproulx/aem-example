@@ -1,16 +1,3 @@
-/**
- * We aren't testing the application entry point here, that's a bit challenging, and somewhat unnecessary.  We will
- * however test the index dependencies (src/main/www/js/index/*.js)
- *
- * With an application architected with appropriate separation of concerns, we can test business logic without testing
- * rendering logic.  However, in order to provide unit testing for this jQuery example, the only available code to test is
- * mediator code which directly affects the view.  Strictly separating view from control and model (as we do in AngularJS)
- * gives us a much better foundation to test against.
- *
- * Building UI's with jQuery unfortunately ties the controller to the view (and it's structure) so tightly that it's easy
- * to break.
- */
-
 var APIConsumer = require( "index/APIConsumer" );
 
 describe( 'APIConsumer', function () {
