@@ -127,7 +127,7 @@ describe( "Automation API", function () {
 
 			scope.$on( "room-updated", receiver.handler.bind( receiver ) );
 
-			$controller( 'RoomCtrl', {$rootScope: rootScope, $scope: scope, RoomService: RoomService} );
+			$controller( 'RoomCtrl', {$element: $("<div></div>" ).attr("id", scope.name), $rootScope: rootScope, $scope: scope, RoomService: RoomService} );
 
 			receiver.reset();
 		} ) );
@@ -198,7 +198,7 @@ describe( "Automation API", function () {
 
 			scope.$on( "zone-updated", receiver.handler.bind( receiver ) );
 
-			$controller( 'ZoneCtrl', {$rootScope: rootScope, $scope: scope, ZoneService: ZoneService} );
+			$controller( 'ZoneCtrl', {$element: $("<div></div>" ).attr("id", scope.name), $rootScope: rootScope, $scope: scope, ZoneService: ZoneService} );
 
 			receiver.reset();
 		} ) );

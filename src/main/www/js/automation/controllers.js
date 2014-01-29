@@ -15,6 +15,9 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	 * to different zones and rooms.
 	 */
 	.controller( "AutomationCtrl", ["$rootScope", "$scope", "DefaultsService", function ( $rootScope, $scope, DefaultsService ) {
+		$scope.rooms = {};
+		$scope.zones = {};
+
 		$scope.temperatures = [ // [15,16,17,18,19,20,21,22,23,24,25];
 			{"label": "15\u00B0C", "value": 15},
 			{"label": "16\u00B0C", "value": 16},
@@ -58,6 +61,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 				} );
 		};
 
+
 		// load defaults right away to populate the views
 		$scope.loadDefaults();
 
@@ -75,14 +79,24 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	}] )
 
 	/*
-	 * The RoomCtrl provides functionality for managing the view state and persistence for rooms.  Primarily lights and (maybe in the future), curtains.
+	 * The RoomCtrl provides functionality for managing the view state and persistence for rooms.  Primarily lights and
+	 * (maybe in the future), curtains.  The view knows which room this controller should be bound to, we need to wait
+	 * for ng-init to tell us which room that is.
 	 */
-	.controller( 'RoomCtrl', ["$rootScope", "$scope", "RoomService", function ( $rootScope, $scope, RoomService ) {
-		$scope.name = $scope.name || "unknown-room"; // this will eventually be re-set by ng-init
+	.controller( 'RoomCtrl', ["$element", "$rootScope", "$scope", "RoomService", function ( $element, $rootScope, $scope, RoomService ) {
+		var undefinedName = "unknown-room";
+		$scope.name = $scope.name || $element.attr("id"); // this will eventually be re-set by ng-init
 		$scope.room = {
 			lights: false, // default to off
 			curtains: false
 		};
+
+		// it's possible that AutomationCtrl has loaded data before the controller has initialized, so check to see
+		// if there's data already available;
+		if(!$scope.initialized && $scope.rooms && $scope.rooms[$scope.name]) {
+			$scope.room = $scope.rooms[$scope.name];
+			$scope.initialized = true;
+		}
 
 		$scope.toggleLights = function () {
 			var room = Object.create( $scope.room );
@@ -136,12 +150,19 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	 * ZoneCtrl manages the temperature and (maybe in the future) fan settings for one or more furnaces / zones that may
 	 * be installed in the premises.
 	 */
-	.controller( 'ZoneCtrl', ["$rootScope", "$scope", "ZoneService", function ( $rootScope, $scope, ZoneService ) {
-		$scope.name = $scope.name || "unknown-zone";
+	.controller( 'ZoneCtrl', ["$element", "$rootScope", "$scope", "ZoneService", function ( $element, $rootScope, $scope, ZoneService ) {
+		$scope.name = $scope.name || $element.attr("id");
 		$scope.zone = {
 			fan: false,
 			temperature: 20
 		};
+
+		// it's possible that AutomationCtrl has loaded data before the controller has initialized, so check to see
+		// if there's data already available;
+		if(!$scope.initialized && $scope.zones && $scope.zones[$scope.name]) {
+			$scope.zone = $scope.zones[$scope.name];
+			$scope.initialized = true;
+		}
 
 		// dontPersist is only necessary when loading defaults, we want to update the view without making a call to the server
 		$scope.$on( "update-zone", function ( event, zoneName, zone, dontPersist ) {
