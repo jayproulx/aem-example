@@ -2,15 +2,14 @@
 <svg version="1.1" id="floorplan" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 2560 1440" enable-background="new 0 0 2560 1440" xml:space="preserve">
 <g id="underlays" transform="translate(-10.185197,-657.03269)">
-	<g id="east-wing" ng-controller="ZoneCtrl" class="zone C{{temperature}}" ng-init="name = 'east-wing'">
-		
+	<g id="east-wing" ng-controller="ZoneCtrl" class="zone C{{zone.temperature}}" ng-init="name = 'east-wing'">
 		<linearGradient class="temperatureGrad" id="SVGID_100_" gradientUnits="userSpaceOnUse" x1="164.2842" y1="1282.4757" x2="561.8547" y2="1282.4757" gradientTransform="matrix(3.9046 0 0 -3.9046 132.0589 6305.1602)">
 			<stop  offset="0" style="stop-color:#E91300;stop-opacity:0"/>
 			<stop  offset="1" style="stop-color:#E91300;stop-opacity:0.5"/>
 		</linearGradient>
 		<path fill="url(#SVGID_100_)" class="zoneBounds" d="M2325.9,1750c0,0-452.6,0-869.1,0c-43.7,86.2-108.7,113-160.1,113c-58.3,0-116.3-26.8-165.3-113c-207.3,0-357.8,0-357.8,0V732.3h1552.2V1750H2325.9z"/>
 	</g>
-	<g id="west-wing" ng-controller="ZoneCtrl" class="zone C{{temperature}}" ng-init="name = 'west-wing'">
+	<g id="west-wing" ng-controller="ZoneCtrl" class="zone C{{zone.temperature}}" ng-init="name = 'west-wing'">
 		
 		<linearGradient class="temperatureGrad" id="SVGID_101_" gradientUnits="userSpaceOnUse" x1="36.5429" y1="1275.0385" x2="426.2447" y2="1275.0385" gradientTransform="matrix(3.9046 0 0 -3.9046 130.6477 6279.5928)">
 			<stop  offset="0" style="stop-color:#0013E9;stop-opacity:0.5"/>
@@ -1077,7 +1076,7 @@
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="1524.4" cy="508.4" r="16.8" ng-click="toggleLights()"/>
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="1140.6" cy="656.7" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				
 				<radialGradient id="SVGID_3_" cx="350.1507" cy="1309.7822" r="72.5227" gradientTransform="matrix(3.9046 0 0 -3.9046 199.9999 5622.5601)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
@@ -1111,7 +1110,7 @@
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="1412.4" cy="874.2" r="16.8" ng-click="toggleLights()"/>
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="1140.6" cy="1050.7" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				
 					<radialGradient id="SVGID_6_" cx="321.5089" cy="1221.4546" r="32.011" gradientTransform="matrix(7.7654 0 0 -7.7654 -1062.1603 10341.2324)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
@@ -1136,7 +1135,7 @@
 			<g class="off">
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="490.1" cy="1024.9" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				
 					<radialGradient id="SVGID_8_" cx="55.4589" cy="1167.5334" r="85.4348" gradientTransform="matrix(3.9046 0 0 -3.9046 272.4333 5583.0586)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
@@ -1153,7 +1152,7 @@
 			<g class="off">
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="1032.1" cy="840.3" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				
 					<radialGradient id="SVGID_9_" cx="219.7101" cy="1224.9069" r="85.2585" gradientTransform="matrix(3.9046 0 0 -3.9046 199.9999 5622.5601)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
@@ -1170,7 +1169,7 @@
 			<g class="off">
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="1736.1" cy="1029.6" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				
 					<radialGradient id="SVGID_10_" cx="393.2062" cy="1176.7917" r="100.7229" gradientTransform="matrix(3.9046 0 0 -3.9046 199.9999 5622.5601)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
@@ -1187,7 +1186,7 @@
 			<g class="off">
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="1849.7" cy="1029.6" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				
 					<radialGradient id="SVGID_11_" cx="422.4514" cy="1176.5396" r="103.532" gradientTransform="matrix(3.9046 0 0 -3.9046 199.9999 5622.5601)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
@@ -1204,7 +1203,7 @@
 			<g class="off">
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="2082.4" cy="131.6" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				<radialGradient id="SVGID_12_" cx="482.3994" cy="1406.4301" r="89.3951" gradientTransform="matrix(3.9046 0 0 -3.9046 199.9999 5622.5601)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
 					<stop  offset="1" style="stop-color:#FFCF01;stop-opacity:0"/>
@@ -1220,7 +1219,7 @@
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="717.4" cy="660.7" r="16.8" ng-click="toggleLights()"/>
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="317.5" cy="501.7" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				<radialGradient id="SVGID_13_" cx="121.6593" cy="1260.2729" r="74.9125" gradientTransform="matrix(3.9046 0 0 -3.9046 272.4333 5583.0586)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
 					<stop  offset="1" style="stop-color:#FFCF01;stop-opacity:0"/>
@@ -1241,7 +1240,7 @@
 			<g class="off">
 				<circle fill="none" stroke="#715725" stroke-width="20" cx="487.8" cy="131.6" r="16.8" ng-click="toggleLights()"/>
 			</g>
-			<g class="on"  ng-class="{'transparent': lights === undefined, 'solid': lights, 'almost-invisible': lights === false}">
+			<g class="on"  ng-class="{'transparent': room.lights === undefined, 'solid': room.lights, 'almost-invisible': room.lights === false}">
 				<radialGradient id="SVGID_15_" cx="114.0073" cy="1324.8772" r="86.9963" gradientTransform="matrix(-3.9046 0 0 3.9046 932.0002 -5040.7002)" gradientUnits="userSpaceOnUse">
 					<stop  offset="0" style="stop-color:#FFCF01;stop-opacity:0.5"/>
 					<stop  offset="1" style="stop-color:#FFCF01;stop-opacity:0"/>

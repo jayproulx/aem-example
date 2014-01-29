@@ -1,55 +1,8 @@
-;(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-angular.module( "index", ["automation"] )
-
-	/*
-	 * APICtrl is an example of how we might pick up broadcast events from inside the automation implementation and react to those changes.
-	 */
-	.controller( "APICtrl", ["$rootScope", "$scope", function ( $rootScope, $scope ) {
-		$scope.messages = [];
-
-		$rootScope.$on( "defaults-loaded", function ( event, data ) {
-			$scope.messages.push( new Date() + ": " + event.name + " fired" );
-		} );
-
-		$rootScope.$on( "room-updated", function ( event, roomName, data ) {
-			$scope.messages.push( new Date() + ": " + event.name + " fired for room " + roomName );
-		} );
-
-		$rootScope.$on( "room-update-error", function ( event, roomName, data ) {
-			$scope.messages.push( new Date() + ": " + event.name + " fired for room " + roomName );
-		} );
-
-		$rootScope.$on( "zone-updated", function ( event, zoneName, data ) {
-			$scope.messages.push( new Date() + ": " + event.name + " fired for zone " + zoneName );
-		} );
-
-		$rootScope.$on( "zone-update-error", function ( event, zoneName, data ) {
-			$scope.messages.push( new Date() + ": " + event.name + " fired for zone " + zoneName );
-		} );
-	}] )
-
-	/*
-	 * The SVG Floorplan will vary it's height when the window resizes if the height is not set explicitly.  These helpers
-	 * are a bit kludgy and this is probably best left to a directive instead. However, it's 11pm and this solves the current
-	 * problem :)
-	 */
-	.controller( "FloorplanCtrl", ["$window", "$scope", function ( $window, $scope ) {
-		$scope.lastHeight = undefined;
-
-		$window.onresize = function () {
-			$scope.resizeFloorplan();
-		}
-
-		$scope.resizeFloorplan = function () {
-			var floorplan = document.getElementById( "floorplan" ),
-				h = (floorplan.offsetWidth * 0.6) + "px";
-
-			if(h == $scope.lastHeight) return;
-
-			floorplan.style.height = h;
-			$scope.lastHeight = h;
-		}
-	}] )
-;
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var APIConsumer=require("index/APIConsumer");angular.module("index",["automation"]),$(function(){var e,o=$(document);e=new APIConsumer,o.on("defaults-loaded",function(o,u){e.log("Defaults were loaded successfully"),e.setData(u)}),o.on("room-updated",function(o,u,n){e.log("Room "+u+" was updated successfully"),e.updateRoom($(".room-template."+u),u,n)}),o.on("zone-updated",function(o,u,n){e.log("Zone "+u+" was updated successfully"),e.updateZone($(".zone-template."+u),u,n)})});
+},{"index/APIConsumer":"CbCXCM"}],"CbCXCM":[function(require,module,exports){
+module.exports=APIConsumer=function(){this.initialized=!1,$.isReady?this.init():$(this.init.bind(this))},APIConsumer.prototype.init=function(){this.$doc=$(document),this.$p=$("#modalAPIConsumer"),this.$rooms=this.$p.find(".all-rooms"),this.$zones=this.$p.find(".all-zones"),this.$roomTpl=$($("#room-template").html()),this.$zoneTpl=$($("#zone-template").html()),this.data=void 0;var t=this.$p.find(".btn.reset");t.on("click",function(){this.log("User reset the automation API data to defaults"),this.$doc.trigger("load-defaults")}.bind(this)),this.initialized=!0},APIConsumer.prototype.log=function(t){$.get("/bin/logging.json",{message:t,time:(new Date).getTime()})},APIConsumer.prototype.setData=function(t){t&&(this.data=t,this.render(this.data.rooms,this.$rooms,this.$roomTpl,this.updateRoom.bind(this)),this.render(this.data.zones,this.$zones,this.$zoneTpl,this.updateZone.bind(this)))},APIConsumer.prototype.updateRoom=function(t,e,i){if(0!==t.length){var o=t.find(".btn.lights"),n=t.find(".room-name");n.text(e),o.off("click"),i.lights?o.addClass("active"):o.removeClass("active"),o.on("click",function(){var t=Object.create(i);t.lights=!t.lights,this.log("User updated room "+n.text()),this.$doc.trigger("update-room",[n.text(),t])}.bind(this))}},APIConsumer.prototype.updateZone=function(t,e,i){if(0!==t.length){var o=t.find(".zone-name"),n=t.find(".dropdown-menu li a"),s=t.find(".current-temperature");n.parent().removeClass("disabled"),n.off("click"),o.text(e),s.text(i.temperature),n.filter(function(){return $(this).data("temp")===i.temperature}).parent().addClass("disabled"),n.on("click",function(t){var e=Object.create(i);e.temperature=$(t.currentTarget).data("temp"),this.log("User updated zone "+o.text()),this.$doc.trigger("update-zone",[o.text(),e])}.bind(this))}},APIConsumer.prototype.render=function(t,e,i,o){var n;if(e.empty(),t)for(n in t)t.hasOwnProperty(n)&&this.renderItem(n,t[n],e,i,o)},APIConsumer.prototype.renderItem=function(t,e,i,o,n){var s=o.clone().addClass(t);i.append(s),n&&n(s,t,e)};
+},{}],"index/APIConsumer":[function(require,module,exports){
+module.exports=require('CbCXCM');
 },{}]},{},[1])
 ;

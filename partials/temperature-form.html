@@ -1,9 +1,0 @@
-<div class="col-sm-6 center">
-    <label for="westWingTemperature">West Wing Temperature</label>
-    <select id="westWingTemperature" ng-model="zones['west-wing'].temperature" ng-change="persistZone('west-wing')" ng-options="temp.value as temp.label for temp in temperatures"></select>
-</div>
-
-<div class="col-sm-6 center">
-    <label for="eastWingTemperature">East Wing Temperature</label>
-    <select id="eastWingTemperature" ng-model="zones['east-wing'].temperature" ng-change="persistZone('east-wing')" ng-options="temp.value as temp.label for temp in temperatures"></select>
-</div>

@@ -1,255 +1,28 @@
-require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"57gZCM":[function(require,module,exports){
-/*
- * Keep the service configuration separate from the logic so that we can load different configurations for different
- * environments.
- *
- * This is the configuration for the gh-pages instance.
- */
-
-module.exports = angular.module( "automation.config", [] )
-
-	.value( "defaultsUrl", "/aem-example/bin/house/defaults.json" )
-	.value( "lightsOnUrl", "/aem-example/bin/house/lights/on.json" )
-	.value( "lightsOffUrl", "/aem-example/bin/house/lights/off.json" )
-	.value( "temperatureSetUrl", "/aem-example/bin/house/temperature/set.json" );
-
-},{}],"automation/automation.config.gh-pages":[function(require,module,exports){
-module.exports=require('57gZCM');
-},{}],"98HH9l":[function(require,module,exports){
-/*
- * Keep the service configuration separate from the logic so that we can load different configurations for different
- * environments.
- */
-
-module.exports = angular.module( "automation.config", [] )
-
-	.value( "defaultsUrl", "/bin/house/defaults.json" )
-	.value( "lightsOnUrl", "/bin/house/lights/on.json" )
-	.value( "lightsOffUrl", "/bin/house/lights/off.json" )
-	.value( "temperatureSetUrl", "/bin/house/temperature/set.json" );
-
-},{}],"automation/automation.config":[function(require,module,exports){
-module.exports=require('98HH9l');
-},{}],"p8iBt2":[function(require,module,exports){
-/*
- * Simulating wait state
- * ---------------------
- * To simulate network lag, since this should execute pretty quickly, $timeout is used to provide a bit of a delay
- * when calling services to show off wait states.  The reason it's implemented in the controllers rather than the
- * services is that we want to return the promise right away, we'll just delay updating the value until after the timeout.
- *
- * Using Values
- * ------------
- * The values defined here can be fairly easily extracted into a new module to be configured either by loading a file
- * from the server, or simply loading pre-defined angular modules for different environments.
- */
-
-var config = require( "automation/automation.config.gh-pages" );
-
-angular.module( "automation", ["ui.bootstrap", "automation.config"] )
-
-	/*
-	 * DefaultsService picks up defaults for all rooms and zones.  In a live application, perhaps this is the current
-	 * state of the house/business.
-	 */
-	.factory( "DefaultsService", ["$http", "defaultsUrl", function ( $http, defaultsUrl ) {
-		var service = {};
-
-		service.getDefaults = function () {
-			return $http( {method: "GET", url: defaultsUrl} );
-		};
-
-		return service;
-	}] )
-
-	/*
-	 * LightsService requests updates from the server when turning on / off lights in differnet rooms.
-	 */
-	.factory( "LightsService", ["$http", "lightsOffUrl", "lightsOnUrl", function ( $http, lightsOffUrl, lightsOnUrl ) {
-		var service = {};
-
-		service.turnOff = function ( room ) {
-			return $http( {method: "GET", url: lightsOffUrl, params: {"room": room}} );
-		};
-
-		service.turnOn = function ( room ) {
-			return $http( {method: "GET", url: lightsOnUrl, params: {"room": room}} );
-		};
-
-		return service;
-	}] )
-
-	/*
-	 * TemperatureService allows us to set the temperature for different zones.
-	 */
-	.factory( "TemperatureService", ["$http", "temperatureSetUrl", function ( $http, temperatureSetUrl ) {
-		var service = {};
-
-		service.setTemperature = function ( zone, temperature ) {
-			return $http( {method: "GET", url: temperatureSetUrl, params: {"zone": zone, "temperature": temperature}} );
-		};
-
-		return service;
-	}] )
-
-	/*
-	 * AutomationCtrl provides high level functionality for all automation activities, and loads defaults to distribute
-	 * to different zones and rooms.
-	 */
-	.controller( "AutomationCtrl", ["$rootScope", "$scope", "$timeout", "DefaultsService", function ( $rootScope, $scope, $timeout, DefaultsService ) {
-		$scope.temperatures = [ // [15,16,17,18,19,20,21,22,23,24,25];
-			{"label": "15°C", "value": 15},
-			{"label": "16°C", "value": 16},
-			{"label": "17°C", "value": 17},
-			{"label": "18°C", "value": 18},
-			{"label": "19°C", "value": 19},
-			{"label": "20°C", "value": 20},
-			{"label": "21°C", "value": 21},
-			{"label": "22°C", "value": 22},
-			{"label": "23°C", "value": 23},
-			{"label": "24°C", "value": 24},
-			{"label": "25°C", "value": 25}
-		];
-
-		DefaultsService.getDefaults()
-			.success( function ( data, status, headers, config ) {
-				$timeout( function () {
-					$scope.zones = data.zones;
-					$scope.rooms = data.rooms;
-
-					// update each room individually
-					for ( var room in $scope.rooms ) {
-						$scope.updateRoom( room );
-					}
-
-					// update each zone individually
-					for ( var zone in $scope.zones ) {
-						$scope.updateZone( zone );
-					}
-
-					// Once all the defaults have been loaded, broadcast this from the rootScope so that external listeners
-					// can pick this up.
-					$rootScope.$broadcast( "defaults-loaded", data );
-				}, 1000 );
-			} )
-			.error( function ( data, status, headers, config ) {
-				// todo: $emit an error event to handle globally if there's a problem loading the defaults
-			} )
-
-		// here we only want to take data from the form and pass it along to the appropriate zone.
-		$scope.updateZone = function ( zone ) {
-			console.log( "broadcasting update-zone for " + zone );
-			$scope.$broadcast( "update-zone", zone, $scope.zones[zone] );
-		};
-
-		$scope.persistZone = function ( zone ) {
-			console.log( "broadcasting persist-zone for " + zone );
-			$scope.$broadcast( "persist-zone", zone, $scope.zones[zone] );
-		};
-
-		$scope.updateRoom = function ( room ) {
-			console.log( "broadcasting update-room for " + room );
-			$scope.$broadcast( "update-room", room, $scope.rooms[room] );
-		}
-	}] )
-
-	/*
-	 * The RoomCtrl provides functionality for managing the view state and persistence for rooms.  Primarily lights and (maybe in the future), curtains.
-	 */
-	.controller( 'RoomCtrl', ["$rootScope", "$scope", "$timeout", "LightsService", function ( $rootScope, $scope, $timeout, LightsService ) {
-		$scope.name = $scope.name || "unknown-room"; // this will eventually be re-set by ng-init
-		$scope.lights = false; // default to off
-
-		$scope.$on( "update-room", function ( event, roomName, room ) {
-			if ( $scope.name == roomName ) {
-				console.log( "on update-room for " + roomName, room )
-				$scope.lights = room.lights;
-
-				// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-				$rootScope.$broadcast( "room-updated", roomName, room );
-			}
-		} );
-
-		$scope.toggleLights = function () {
-			var originalState = $scope.lights,
-				newState = !$scope.lights,
-				serviceMethod = newState ? LightsService.turnOn : LightsService.turnOff;
-
-			// set the lights state to undefined while we're waiting for a response, we'll use this to affect the view
-			// during the transition.
-			$scope.lights = undefined;
-
-			serviceMethod( $scope.name )
-				.success( function ( data, status, headers, config ) {
-					$timeout( function () {
-						$scope.lights = data.lights;
-					}, 1000 );
-
-					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-					$rootScope.$broadcast( "room-updated", $scope.name, {lights: $scope.lights} );
-				} )
-				.error( function ( data, status, headers, config ) {
-					$timeout( function () {
-						// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
-						$rootScope.$broadcast( "room-update-error", $scope.name, {data: data, status: status, headers: headers, config: config} );
-
-						// revert the light setting back to what it was, since we couldn't contact the server.
-						$scope.lights = originalState;
-					}, 1000 )
-				} )
-		};
-	}] )
-
-	/*
-	 * ZoneCtrl manages the temperature (and maybe in the future) fan settings for one or more furnaces / zones that may
-	 * be installed in the premises.
-	 */
-	.controller( 'ZoneCtrl', ["$rootScope", "$scope", "$timeout", "TemperatureService", function ( $rootScope, $scope, $timeout, TemperatureService ) {
-		$scope.name = $scope.name || "unknown-zone";
-		$scope.temperature = 20;
-
-		$scope.$on( "update-zone", function ( event, zoneName, zone ) {
-			if ( $scope.name == zoneName ) {
-				console.log( "on update-zone for " + zoneName, zone )
-				$scope.temperature = zone.temperature;
-
-				// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-				$rootScope.$broadcast( "zone-updated", zoneName, {temperature: zone.temperature} );
-
-			}
-		} );
-
-		$scope.$on( "persist-zone", function ( event, zoneName, zone ) {
-			if ( $scope.name == zoneName ) {
-				console.log( "on update-zone for " + zoneName, zone )
-				$scope.setTemperature( zone.temperature );
-			}
-		} );
-
-		$scope.setTemperature = function ( temperature ) {
-			var originalTemperature = $scope.temperature;
-
-			// todo: for a nice CSS transition, we can use a temperature half way between the original value and the new value
-
-			TemperatureService.setTemperature( $scope.name, temperature )
-				.success( function ( data, status, headers, config ) {
-					// normally we'd want to set this to the value of the response from the server,
-					// however, this is a static example, so we'll use what the user set in the UI.
-					$scope.temperature = temperature;
-
-					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
-					$rootScope.$broadcast( "zone-updated", $scope.name, {temperature: temperature} );
-				} )
-				.error( function ( data, status, headers, config ) {
-					// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
-					$rootScope.$broadcast( "zone-update-error", $scope.name, {data: data, status: status, headers: headers, config: config} );
-
-					// reset the value back to the original temperature, since we had an error from the service
-					$scope.temperature = originalTemperature;
-				} );
-		}
-	}] );
-},{"automation/automation.config":"98HH9l"}],"automation/automation":[function(require,module,exports){
-module.exports=require('p8iBt2');
-},{}]},{},["p8iBt2"])
+require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+var controllers=require("automation/controllers"),directives=require("automation/directives"),adapter=require("automation/adapter");module.exports=angular.module("automation",["ui.bootstrap","automation.controllers","automation.directives","automation.adapter"]);
+},{"automation/adapter":"UOS8QZ","automation/controllers":"lq1gDp","automation/directives":"F79/c7"}],"UOS8QZ":[function(require,module,exports){
+module.exports=angular.module("automation.adapter",[]).run(["$rootScope","$document",function(o,n){var t=function(o){var t=Array.prototype.slice.call(arguments,1);n.trigger(o.name,t)},a=function(n){var t=Array.prototype.slice.call(arguments,1);t.unshift(n.type),o.$broadcast.apply(o,t)};n.on("load-defaults",function(o){a(o)}),n.on("update-room",function(o,n,t){a(o,n,t)}),n.on("update-zone",function(o,n,t){a(o,n,t)}),o.$on("defaults-loaded",function(o,n){t(o,n)}),o.$on("defaults-load-error",function(o,n){t(o,n)}),o.$on("room-updated",function(o,n,a){t(o,n,a)}),o.$on("room-update-error",function(o,n,a){t(o,n,a)}),o.$on("zone-updated",function(o,n,a){t(o,n,a)}),o.$on("zone-update-error",function(o,n,a){t(o,n,a)})}]);
+},{}],"automation/adapter":[function(require,module,exports){
+module.exports=require('UOS8QZ');
+},{}],"automation/config.gh-pages":[function(require,module,exports){
+module.exports=require('A86jH9');
+},{}],"A86jH9":[function(require,module,exports){
+module.exports=angular.module("automation.config",[]).value("defaultsUrl","/aem-example/bin/house/defaults.json").value("roomSetUrl","/aem-example/bin/house/room.json").value("zoneSetUrl","/aem-example/bin/house/zone.json").value("lightsOnUrl","/aem-example/bin/house/lights/on.json").value("lightsOffUrl","/aem-example/bin/house/lights/off.json").value("temperatureSetUrl","/aem-example/bin/house/temperature/set.json");
+},{}],"T2ncs/":[function(require,module,exports){
+module.exports=angular.module("automation.config",[]).value("defaultsUrl","/bin/house/defaults.json").value("roomSetUrl","/bin/house/room.json").value("zoneSetUrl","/bin/house/zone.json").value("lightsOnUrl","/bin/house/lights/on.json").value("lightsOffUrl","/bin/house/lights/off.json").value("temperatureSetUrl","/bin/house/temperature/set.json");
+},{}],"automation/config":[function(require,module,exports){
+module.exports=require('T2ncs/');
+},{}],"lq1gDp":[function(require,module,exports){
+var services=require("automation/services");module.exports=angular.module("automation.controllers",["automation.services"]).controller("AutomationCtrl",["$rootScope","$scope","DefaultsService",function(o,e,a){e.rooms={},e.zones={},e.temperatures=[{label:"15°C",value:15},{label:"16°C",value:16},{label:"17°C",value:17},{label:"18°C",value:18},{label:"19°C",value:19},{label:"20°C",value:20},{label:"21°C",value:21},{label:"22°C",value:22},{label:"23°C",value:23},{label:"24°C",value:24},{label:"25°C",value:25}],e.loadDefaults=function(){a.getDefaults().success(function(a){var n,t;e.zones=a.zones,e.rooms=a.rooms,o.$broadcast("defaults-loaded",a);for(n in e.rooms)e.rooms.hasOwnProperty(n)&&e.updateRoom(n,!0);for(t in e.zones)e.zones.hasOwnProperty(t)&&e.updateZone(t,!0)}).error(function(e,a,n,t){o.$broadcast("defaults-load-error",{data:e,status:a,headers:n,config:t})})},e.loadDefaults(),e.$on("load-defaults",function(){e.loadDefaults()}),e.updateZone=function(o,a){e.$broadcast("update-zone",o,e.zones[o],a)},e.updateRoom=function(o,a){e.$broadcast("update-room",o,e.rooms[o],a)}}]).controller("RoomCtrl",["$element","$rootScope","$scope","RoomService",function(o,e,a,n){a.name=a.name||o.attr("id"),a.room={lights:!1,curtains:!1},!a.initialized&&a.rooms&&a.rooms[a.name]&&(a.room=a.rooms[a.name],a.initialized=!0),a.toggleLights=function(){var o=Object.create(a.room);o.lights=!o.lights,a.setRoom(a.name,o)},a.$on("update-room",function(o,n,t,r){if(a.name===n){if(void 0===t)return e.$broadcast("room-update-error",n,{data:"room object cannot be undefined",status:"400",headers:void 0,config:void 0}),void(console&&console.error&&console.error("Error handling update-room: Room object cannot be undefined"));r?(a.room=t,e.$broadcast("room-updated",n,t)):a.setRoom(n,t)}}),a.setRoom=function(o,t){var r=a.room;a.room.lights=void 0,n.setRoom(o,t).success(function(){a.room.lights=t.lights,e.$broadcast("room-updated",o,t)}).error(function(n,t,s,d){e.$broadcast("room-update-error",o,{data:n,status:t,headers:s,config:d}),a.room=r})}}]).controller("ZoneCtrl",["$element","$rootScope","$scope","ZoneService",function(o,e,a,n){a.name=a.name||o.attr("id"),a.zone={fan:!1,temperature:20},!a.initialized&&a.zones&&a.zones[a.name]&&(a.zone=a.zones[a.name],a.initialized=!0),a.$on("update-zone",function(o,n,t,r){if(a.name==n){if(void 0===t)return e.$broadcast("zone-update-error",n,{data:"zone object cannot be undefined",status:"400",headers:void 0,config:void 0}),void(console&&console.error&&console.error("Error handling update-zone: Zone object cannot be undefined"));r?(a.zone=t,e.$broadcast("zone-updated",n,a.zone)):a.updateZone(t)}}),a.updateZone=function(o){var t=a.zone;n.setZone(a.name,o).success(function(){a.zone=o,e.$broadcast("zone-updated",a.name,a.zone)}).error(function(o,n,r,s){e.$broadcast("zone-update-error",a.name,{data:o,status:n,headers:r,config:s}),a.zone=t})}}]);
+},{"automation/services":"+c2s+C"}],"automation/controllers":[function(require,module,exports){
+module.exports=require('lq1gDp');
+},{}],"F79/c7":[function(require,module,exports){
+module.exports=angular.module("automation.directives",[]).directive("floorplan",["$window",function(e){return{restrict:"E",transclude:!1,controller:["$scope","$element",function(t,o){t.lastHeight=void 0;var n=e.onresize;e.onresize=function(){t.resizeFloorplan(),"function"==typeof n&&n.apply(e,arguments)},t.resizeFloorplan=function(){var e=o.find("svg"),n=.6*e[0].offsetWidth+"px";n!=t.lastHeight&&(e.css("height",n),t.lastHeight=n)}}],templateUrl:"partials/floorplan.html"}}]);
+},{}],"automation/directives":[function(require,module,exports){
+module.exports=require('F79/c7');
+},{}],"+c2s+C":[function(require,module,exports){
+var config=require("automation/config.gh-pages");module.exports=angular.module("automation.services",["automation.config"]).factory("DefaultsService",["$http","defaultsUrl",function(r,t){var e={};return e.getDefaults=function(){return r({method:"GET",url:t})},e}]).factory("RoomService",["$http","roomSetUrl",function(r,t){var e={};return e.setRoom=function(e,n){return r({method:"GET",url:t,params:{name:e,lights:n.lights,curtains:n.curtains}})},e}]).factory("LightsService",["$http","lightsOffUrl","lightsOnUrl",function(r,t,e){var n={};return n.turnOff=function(e){return r({method:"GET",url:t,params:{room:e}})},n.turnOn=function(t){return r({method:"GET",url:e,params:{room:t}})},n}]).factory("ZoneService",["$http","zoneSetUrl",function(r,t){var e={};return e.setZone=function(e,n){return r({method:"GET",url:t,params:{name:e,temperature:n.temperature,fan:n.fan}})},e}]).factory("TemperatureService",["$http","temperatureSetUrl",function(r,t){var e={};return e.setTemperature=function(e,n){return r({method:"GET",url:t,params:{zone:e,temperature:n}})},e}]);
+},{"automation/config":"T2ncs/"}],"automation/services":[function(require,module,exports){
+module.exports=require('+c2s+C');
+},{}]},{},[1])
 ;
