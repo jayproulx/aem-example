@@ -98,7 +98,6 @@ Tested On
 - OSX Firefox Latest
 - OSX Chrome Latest
 - OSX Safari Latest
-- iPad iOS 7
 
 I expect this should work on most modern browsers.  Animations run more smoothly on Chrome, Safari and iOS than Firefox.
 
