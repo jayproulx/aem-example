@@ -85,7 +85,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	 */
 	.controller( 'RoomCtrl', ["$element", "$rootScope", "$scope", "RoomService", function ( $element, $rootScope, $scope, RoomService ) {
 		var undefinedName = "unknown-room";
-		$scope.name = $scope.name || $element.attr("id"); // this will eventually be re-set by ng-init
+		$scope.name = $scope.name || $element.attr( "id" ); // this will eventually be re-set by ng-init
 		$scope.room = {
 			lights: false, // default to off
 			curtains: false
@@ -93,7 +93,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 
 		// it's possible that AutomationCtrl has loaded data before the controller has initialized, so check to see
 		// if there's data already available;
-		if(!$scope.initialized && $scope.rooms && $scope.rooms[$scope.name]) {
+		if ( !$scope.initialized && $scope.rooms && $scope.rooms[$scope.name] ) {
 			$scope.room = $scope.rooms[$scope.name];
 			$scope.initialized = true;
 		}
@@ -108,6 +108,14 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 		// dontPersist is only necessary when loading defaults, we want to update the view without making a call to the server
 		$scope.$on( "update-room", function ( event, roomName, room, dontPersist ) {
 			if ( $scope.name === roomName ) {
+				if ( room === undefined ) {
+					$rootScope.$broadcast( "room-update-error", roomName, {data: "room object cannot be undefined", status: "400", headers: undefined, config: undefined} );
+
+					if ( console && console.error ) {
+						console.error( "Error handling update-room: Room object cannot be undefined" );
+					}
+					return;
+				}
 
 				if ( dontPersist ) {
 					$scope.room = room;
@@ -151,7 +159,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	 * be installed in the premises.
 	 */
 	.controller( 'ZoneCtrl', ["$element", "$rootScope", "$scope", "ZoneService", function ( $element, $rootScope, $scope, ZoneService ) {
-		$scope.name = $scope.name || $element.attr("id");
+		$scope.name = $scope.name || $element.attr( "id" );
 		$scope.zone = {
 			fan: false,
 			temperature: 20
@@ -159,7 +167,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 
 		// it's possible that AutomationCtrl has loaded data before the controller has initialized, so check to see
 		// if there's data already available;
-		if(!$scope.initialized && $scope.zones && $scope.zones[$scope.name]) {
+		if ( !$scope.initialized && $scope.zones && $scope.zones[$scope.name] ) {
 			$scope.zone = $scope.zones[$scope.name];
 			$scope.initialized = true;
 		}
@@ -167,6 +175,15 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 		// dontPersist is only necessary when loading defaults, we want to update the view without making a call to the server
 		$scope.$on( "update-zone", function ( event, zoneName, zone, dontPersist ) {
 			if ( $scope.name == zoneName ) {
+
+				if ( zone === undefined ) {
+					$rootScope.$broadcast( "zone-update-error", zoneName, {data: "zone object cannot be undefined", status: "400", headers: undefined, config: undefined} );
+
+					if ( console && console.error ) {
+						console.error( "Error handling update-zone: Zone object cannot be undefined" );
+					}
+					return;
+				}
 
 				if ( dontPersist ) {
 					$scope.zone = zone;
