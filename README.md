@@ -1,6 +1,8 @@
 AEM JavaScript Example
 ======================
 
+[![Build Status](https://travis-ci.org/jayproulx/aem-example.png?branch=master)](https://travis-ci.org/jayproulx/aem-example)
+
 Running the Example
 -------------------
 
