@@ -69,6 +69,16 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 			$scope.loadDefaults();
 		} );
 
+		$scope.$on("zone-updated", function(event, zoneName, zone) {
+			console.log(zoneName, zone);
+			$scope.zones[zoneName] = zone;
+		});
+
+		$scope.$on("room-updated", function(event, roomName, room) {
+			console.log(roomName, room);
+			$scope.rooms[roomName] = room;
+		});
+
 		$scope.updateZone = function ( zone, dontPersist ) {
 			$scope.$broadcast( "update-zone", zone, $scope.zones[zone], dontPersist );
 		};

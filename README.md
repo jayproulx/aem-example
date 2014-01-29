@@ -6,7 +6,15 @@ AEM JavaScript Example
 Running the Example
 -------------------
 
+### Production Version ###
+
 http://jayproulx.github.com/aem-example/
+
+### Running the Node.js HTTP Server ###
+
+There are instructions on starting up the HTTP server over on the Untethered repo:
+
+[https://github.com/jayproulx/generator-untethered#developing-an-untethered-ui](https://github.com/jayproulx/generator-untethered#developing-an-untethered-ui)
 
 Requirements
 ------------
