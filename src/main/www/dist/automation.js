@@ -1,13 +1,13 @@
 require=(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 var controllers=require("automation/controllers"),directives=require("automation/directives"),adapter=require("automation/adapter");module.exports=angular.module("automation",["ui.bootstrap","automation.controllers","automation.directives","automation.adapter"]);
-},{"automation/adapter":"UOS8QZ","automation/controllers":"lq1gDp","automation/directives":"F79/c7"}],"automation/adapter":[function(require,module,exports){
-module.exports=require('UOS8QZ');
-},{}],"UOS8QZ":[function(require,module,exports){
+},{"automation/adapter":"UOS8QZ","automation/controllers":"lq1gDp","automation/directives":"F79/c7"}],"UOS8QZ":[function(require,module,exports){
 module.exports=angular.module("automation.adapter",[]).run(["$rootScope","$document",function(o,n){var t=function(o){var t=Array.prototype.slice.call(arguments,1);n.trigger(o.name,t)},a=function(n){var t=Array.prototype.slice.call(arguments,1);t.unshift(n.type),o.$broadcast.apply(o,t)};n.on("load-defaults",function(o){a(o)}),n.on("update-room",function(o,n,t){a(o,n,t)}),n.on("update-zone",function(o,n,t){a(o,n,t)}),o.$on("defaults-loaded",function(o,n){t(o,n)}),o.$on("defaults-load-error",function(o,n){t(o,n)}),o.$on("room-updated",function(o,n,a){t(o,n,a)}),o.$on("room-update-error",function(o,n,a){t(o,n,a)}),o.$on("zone-updated",function(o,n,a){t(o,n,a)}),o.$on("zone-update-error",function(o,n,a){t(o,n,a)})}]);
-},{}],"A86jH9":[function(require,module,exports){
-module.exports=angular.module("automation.config",[]).value("defaultsUrl","/aem-example/bin/house/defaults.json").value("roomSetUrl","/aem-example/bin/house/room.json").value("zoneSetUrl","/aem-example/bin/house/zone.json").value("lightsOnUrl","/aem-example/bin/house/lights/on.json").value("lightsOffUrl","/aem-example/bin/house/lights/off.json").value("temperatureSetUrl","/aem-example/bin/house/temperature/set.json");
+},{}],"automation/adapter":[function(require,module,exports){
+module.exports=require('UOS8QZ');
 },{}],"automation/config.gh-pages":[function(require,module,exports){
 module.exports=require('A86jH9');
+},{}],"A86jH9":[function(require,module,exports){
+module.exports=angular.module("automation.config",[]).value("defaultsUrl","/aem-example/bin/house/defaults.json").value("roomSetUrl","/aem-example/bin/house/room.json").value("zoneSetUrl","/aem-example/bin/house/zone.json").value("lightsOnUrl","/aem-example/bin/house/lights/on.json").value("lightsOffUrl","/aem-example/bin/house/lights/off.json").value("temperatureSetUrl","/aem-example/bin/house/temperature/set.json");
 },{}],"T2ncs/":[function(require,module,exports){
 module.exports=angular.module("automation.config",[]).value("defaultsUrl","/bin/house/defaults.json").value("roomSetUrl","/bin/house/room.json").value("zoneSetUrl","/bin/house/zone.json").value("lightsOnUrl","/bin/house/lights/on.json").value("lightsOffUrl","/bin/house/lights/off.json").value("temperatureSetUrl","/bin/house/temperature/set.json");
 },{}],"automation/config":[function(require,module,exports){
