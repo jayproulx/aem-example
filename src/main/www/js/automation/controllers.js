@@ -1,10 +1,4 @@
 /*
- * Simulating wait state
- * ---------------------
- * To simulate network lag, since this should execute pretty quickly, $timeout is used to provide a bit of a delay
- * when calling services to show off wait states.  The reason it's implemented in the controllers rather than the
- * services is that we want to return the promise right away, we'll just delay updating the value until after the timeout.
- *
  * On "dontPersist"
  * ----------------
  * We want the default value to be negative (i.e. persist all the time, unless we say otherwise), so in order to preserve
@@ -20,7 +14,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	 * AutomationCtrl provides high level functionality for all automation activities, and loads defaults to distribute
 	 * to different zones and rooms.
 	 */
-	.controller( "AutomationCtrl", ["$rootScope", "$scope", "$timeout", "DefaultsService", function ( $rootScope, $scope, $timeout, DefaultsService ) {
+	.controller( "AutomationCtrl", ["$rootScope", "$scope", "DefaultsService", function ( $rootScope, $scope, DefaultsService ) {
 		$scope.temperatures = [ // [15,16,17,18,19,20,21,22,23,24,25];
 			{"label": "15\u00B0C", "value": 15},
 			{"label": "16\u00B0C", "value": 16},
@@ -38,27 +32,25 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 		$scope.loadDefaults = function () {
 			DefaultsService.getDefaults()
 				.success( function ( data, status, headers, config ) {
-					$timeout( function () {
-						var room, zone;
-						$scope.zones = data.zones;
-						$scope.rooms = data.rooms;
+					var room, zone;
+					$scope.zones = data.zones;
+					$scope.rooms = data.rooms;
 
-						$rootScope.$broadcast( "defaults-loaded", data );
+					$rootScope.$broadcast( "defaults-loaded", data );
 
-						// update each room individually
-						for ( room in $scope.rooms ) {
-							if ( $scope.rooms.hasOwnProperty( room ) ) {
-								$scope.updateRoom( room, true );
-							}
+					// update each room individually
+					for ( room in $scope.rooms ) {
+						if ( $scope.rooms.hasOwnProperty( room ) ) {
+							$scope.updateRoom( room, true );
 						}
+					}
 
-						// update each zone individually
-						for ( zone in $scope.zones ) {
-							if ( $scope.zones.hasOwnProperty( zone ) ) {
-								$scope.updateZone( zone, true );
-							}
+					// update each zone individually
+					for ( zone in $scope.zones ) {
+						if ( $scope.zones.hasOwnProperty( zone ) ) {
+							$scope.updateZone( zone, true );
 						}
-					}, 1000 );
+					}
 				} )
 				.error( function ( data, status, headers, config ) {
 					// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
@@ -85,7 +77,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	/*
 	 * The RoomCtrl provides functionality for managing the view state and persistence for rooms.  Primarily lights and (maybe in the future), curtains.
 	 */
-	.controller( 'RoomCtrl', ["$rootScope", "$scope", "$timeout", "RoomService", function ( $rootScope, $scope, $timeout, RoomService ) {
+	.controller( 'RoomCtrl', ["$rootScope", "$scope", "RoomService", function ( $rootScope, $scope, RoomService ) {
 		$scope.name = $scope.name || "unknown-room"; // this will eventually be re-set by ng-init
 		$scope.room = {
 			lights: false, // default to off
@@ -124,23 +116,18 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 
 			RoomService.setRoom( roomName, room )
 				.success( function ( data, status, headers, config ) {
-					$timeout( function () {
-						// for this demo, we're not actually setting it to the response, we want to use the data passed in
-						$scope.room.lights = room.lights;
-
-					}, 1000 );
+					// for this demo, we're not actually setting it to the response, we want to use the data passed in
+					$scope.room.lights = room.lights;
 
 					// once this model has been updated, broadcast this event so that we can pick up these changes from other implementations.
 					$rootScope.$broadcast( "room-updated", roomName, room );
 				} )
 				.error( function ( data, status, headers, config ) {
-					$timeout( function () {
-						// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
-						$rootScope.$broadcast( "room-update-error", roomName, {data: data, status: status, headers: headers, config: config} );
+					// broadcast an event so that we can pick up room update errors from elsewhere in a custom implementation
+					$rootScope.$broadcast( "room-update-error", roomName, {data: data, status: status, headers: headers, config: config} );
 
-						// revert the light setting back to what it was, since we couldn't contact the server.
-						$scope.room = originalRoom;
-					}, 1000 );
+					// revert the light setting back to what it was, since we couldn't contact the server.
+					$scope.room = originalRoom;
 				} );
 		};
 	}] )
@@ -149,7 +136,7 @@ module.exports = angular.module( "automation.controllers", ["automation.services
 	 * ZoneCtrl manages the temperature and (maybe in the future) fan settings for one or more furnaces / zones that may
 	 * be installed in the premises.
 	 */
-	.controller( 'ZoneCtrl', ["$rootScope", "$scope", "$timeout", "ZoneService", function ( $rootScope, $scope, $timeout, ZoneService ) {
+	.controller( 'ZoneCtrl', ["$rootScope", "$scope", "ZoneService", function ( $rootScope, $scope, ZoneService ) {
 		$scope.name = $scope.name || "unknown-zone";
 		$scope.zone = {
 			fan: false,
