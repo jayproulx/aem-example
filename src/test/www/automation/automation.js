@@ -29,7 +29,7 @@ var Receiver = {
 
 	handler: function ( event ) {
 		// checking the type/name property allows us to handle jQuery/document events, and name for AngularJS events.
-		var key = event.hasOwnProperty('type') ? event.type : event.name;
+		var key = event.hasOwnProperty( 'type' ) ? event.type : event.name;
 		if ( this.received[key] === undefined ) {
 			this.received[key] = 0;
 		}
@@ -237,4 +237,74 @@ describe( "Automation API", function () {
 		} );
 
 	} );
+
+	describe( "Adapter", function () {
+		var receiver, rootScope, doc;
+
+		beforeEach( inject( function ( $rootScope, $document ) {
+			doc = $document;
+			rootScope = $rootScope;
+
+			receiver = Object.create( Receiver );
+
+			$rootScope.$on( "load-defaults", receiver.handler.bind( receiver ) );
+			$rootScope.$on( "update-room", receiver.handler.bind( receiver ) );
+			$rootScope.$on( "update-zone", receiver.handler.bind( receiver ) );
+			$document.on( "defaults-loaded", receiver.handler.bind( receiver ) );
+			$document.on( "defaults-load-error", receiver.handler.bind( receiver ) );
+			$document.on( "room-updated", receiver.handler.bind( receiver ) );
+			$document.on( "room-update-error", receiver.handler.bind( receiver ) );
+			$document.on( "zone-updated", receiver.handler.bind( receiver ) );
+			$document.on( "zone-update-error", receiver.handler.bind( receiver ) );
+
+			receiver.reset();
+		} ) );
+
+		it( 'dispatches an angular load-defaults event when handling the equivalent document event', function () {
+			doc.trigger( "load-defaults" );
+			expect( receiver.received["load-defaults"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches an angular update-room event when handling the equivalent document event', function () {
+			doc.trigger( "update-room" );
+			expect( receiver.received["update-room"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches an angular update-zone event when handling the equivalent document event', function () {
+			doc.trigger( "update-zone" );
+			expect( receiver.received["update-zone"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches a document defaults-loaded event when handling the equivalent angular event', function () {
+			doc.trigger( "defaults-loaded" );
+			expect( receiver.received["defaults-loaded"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches a document defaults-load-error event when handling the equivalent angular event', function () {
+			doc.trigger( "defaults-load-error" );
+			expect( receiver.received["defaults-load-error"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches a document room-updated event when handling the equivalent angular event', function () {
+			doc.trigger( "room-updated" );
+			expect( receiver.received["room-updated"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches a document room-update-error event when handling the equivalent angular event', function () {
+			doc.trigger( "room-update-error" );
+			expect( receiver.received["room-update-error"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches a document zone-updated event when handling the equivalent angular event', function () {
+			doc.trigger( "zone-updated" );
+			expect( receiver.received["zone-updated"] ).toBe( 1 );
+		} );
+
+		it( 'dispatches a document zone-update-error event when handling the equivalent angular event', function () {
+			doc.trigger( "zone-update-error" );
+			expect( receiver.received["zone-update-error"] ).toBe( 1 );
+		} );
+
+	} );
+
 } );
