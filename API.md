@@ -14,14 +14,14 @@ While the API was written in AngularJS, all events are adapted and dispatched fr
 1. Load the Angular application: You can add it directly as ```ng-app="automation"```, or you can add ```automation``` as a dependency to your own Angular application (as we've done in [index.html](src/main/www/index.html) and [index.js](src/main/www/js/index.js))
 1. Add the Automation UI to your document as a child under your ```ng-app``` element.
     - ```html <div class="container" ng-include="'partials/automation.html'"></div>```
-1. Create an API Consumer (as we've done in [APIConsumer.js](src/main/www/js/index/apiconsumer.js)), or alternatively, for testing, you can simply dispatch events from the Web Inspector and watch the updates take place.
+1. Create an API Consumer (as we've done in [APIConsumer.js](src/main/www/js/index/APIConsumer.js)), or alternatively, for testing, you can simply dispatch events from the Web Inspector and watch the updates take place.
 
 Events
 ------
 
 Events are the primary mode of communication with the Automation API.  You have two options, you can either broadcast/consume the events using an AngularJS ```$rootScope```, or you can trigger/listen for the events on ```$(document)```.  Documentation here is only provided for the ```$(document)``` implementation.
 
-Have a look at the [adapter](src/main/www/js/automation/adapter.js) to see how events are translated from AngularJS to jQuery space.  Examples of the API events in use can be seen in [apiconsumer.js](src/main/www/js/index/apiconsumer.js).
+Have a look at the [adapter](src/main/www/js/automation/adapter.js) to see how events are translated from AngularJS to jQuery space.  Examples of the API events in use can be seen in [APIConsumer.js](src/main/www/js/index/APIConsumer.js).
 
 Read "Data Structures" below for a reference to the format of the data to pass to the events.
 
